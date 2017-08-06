@@ -4,9 +4,15 @@ import morgan from "morgan";
 import { StaticRouter as Router, matchPath } from "react-router";
 import render from "./render";
 import Routes from "./routes";
-import NoMatch from "./components/noMatch";
+import NotFound from "components/NotFound";
 
-const routes = ["/", "/about"];
+const routes = [
+  "/",
+  "/playlists/:playlistId",
+  "/friends",
+  "/categories/:categoryId/playlists",
+  "/about",
+];
 
 const app = express();
 
@@ -19,7 +25,7 @@ app.get("*", (req, res) => {
     null
   );
   if (!match) {
-    res.status(404).send(render(<NoMatch />));
+    res.status(404).send(render(<NotFound />));
   }
   const context = {};
   res.status(200).send(
