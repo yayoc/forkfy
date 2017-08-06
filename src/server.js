@@ -2,16 +2,16 @@ import express from "express";
 import React from "react";
 import morgan from "morgan";
 import { StaticRouter as Router, matchPath } from "react-router";
-import render from "./render";
-import Routes from "./routes";
 import NotFound from "components/NotFound";
+import render from "render";
+import Routes from "routes";
 
 const routes = [
   "/",
   "/playlists/:playlistId",
   "/friends",
   "/categories/:categoryId/playlists",
-  "/about",
+  "/about"
 ];
 
 const app = express();

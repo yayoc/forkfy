@@ -1,7 +1,11 @@
 {
   "extends": ["airbnb", "plugin:flowtype/recommended", "prettier/react"],
   "settings": {
-    "import/resolver": "webpack"
+    "import/resolver": {
+      "webpack": {
+        "config": "./config/client"
+      }
+    }
   },
   "env": {
     "browser": true,
