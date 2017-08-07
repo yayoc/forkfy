@@ -1,10 +1,12 @@
 import express from "express";
 import React from "react";
+import { renderToString } from "react-dom/server";
 import morgan from "morgan";
+import path from "path";
 import { StaticRouter as Router, matchPath } from "react-router";
 import NotFound from "components/NotFound";
-import render from "render";
 import Routes from "routes";
+import template from "template";
 
 const routes = [
   "/",
@@ -16,6 +18,8 @@ const routes = [
 
 const app = express();
 
+app.set("view engine", "ejs");
+app.set("views", path.dirname);
 app.use("/static", express.static("./dist"));
 app.use(morgan("combined"));
 
@@ -25,16 +29,16 @@ app.get("*", (req, res) => {
     null
   );
   if (!match) {
-    res.status(404).send(render(<NotFound />));
+    const markup = renderToString(<NotFound />);
+    res.status(404).send(markup);
   }
   const context = {};
-  res.status(200).send(
-    render(
-      <Router location={req.url} context={context}>
-        <Routes />
-      </Router>
-    )
+  const markup = renderToString(
+    <Router location={req.url} context={context}>
+      <Routes />
+    </Router>
   );
+  res.send(template({ markup, title: "" }));
 });
 
 app.listen(3000, () => console.log("listening on port 3000"));

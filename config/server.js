@@ -1,14 +1,14 @@
+const CommonConfig = require("./common.js");
+
 const nodeExternals = require("webpack-node-externals");
 const path = require("path");
-const srcPath = path.join(__dirname, "../src");
-const distPath = path.join(__dirname, "../dist");
 
 module.exports = {
-  context: srcPath,
+  context: CommonConfig.srcPath,
   target: "node",
   entry: "./server",
   output: {
-    path: distPath,
+    path: CommonConfig.distPath,
     filename: "server.js"
   },
   node: {
@@ -16,37 +16,16 @@ module.exports = {
     __filename: false
   },
   resolve: {
-    modules: [path.resolve(__dirname, "../node_modules"), srcPath],
+    modules: [path.resolve(__dirname, "../node_modules"), CommonConfig.srcPath],
     extensions: ["*", ".js", ".json"]
   },
   module: {
     rules: [
-      {
-        test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
-        use: {
-          loader: "babel-loader",
-          options: {
-            cacheDirectory: true
-          }
-        }
-      }
+      CommonConfig.BabelLoaderRule,
+      CommonConfig.IsomorphicStyleLoaderRule
     ]
   },
   externals: nodeExternals(),
   devtool: "source-map",
-  stats: {
-    assets: true,
-    children: false,
-    chunks: false,
-    hash: false,
-    modules: false,
-    publicPath: false,
-    timings: true,
-    version: false,
-    warnings: true,
-    colors: {
-      green: "\u001b[32m"
-    }
-  }
+  stats: CommonConfig.stats
 };

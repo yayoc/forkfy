@@ -1,48 +1,24 @@
+const CommonConfig = require("./common.js");
+
 const path = require("path");
 
-const srcPath = path.join(__dirname, "../src");
-const distPath = path.join(__dirname, "../dist");
-
 module.exports = {
-  context: srcPath,
+  context: CommonConfig.srcPath,
   target: "web",
   entry: "./client",
   output: {
-    path: distPath,
+    path: CommonConfig.distPath,
     filename: "client.js",
     publicPath: "/"
   },
   resolve: {
-    modules: [path.resolve(__dirname, "../node_modules"), srcPath],
+    modules: [path.resolve(__dirname, "../node_modules"), CommonConfig.srcPath],
     extensions: ["*", ".js", ".json"]
   },
   module: {
-    rules: [
-      {
-        test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
-        use: {
-          loader: "babel-loader",
-          options: {
-            cacheDirectory: true
-          }
-        }
-      }
-    ]
+    rules: [CommonConfig.BabelLoaderRule, CommonConfig.CSSLoaderRule]
   },
+  plugins: [CommonConfig.LocalStyles],
   devtool: "source-map",
-  stats: {
-    assets: true,
-    children: false,
-    chunks: false,
-    hash: false,
-    modules: false,
-    publicPath: false,
-    timings: true,
-    version: false,
-    warnings: true,
-    colors: {
-      green: "\u001b[32m"
-    }
-  }
+  stats: CommonConfig.stats
 };
