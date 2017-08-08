@@ -1,12 +1,12 @@
+import NotFound from "components/NotFound";
 import * as express from "express";
-import * as React from "react";
-import { renderToString } from "react-dom/server";
 import * as morgan from "morgan";
 import * as path from "path";
-import { StaticRouter as Router, matchPath } from "react-router";
-import template from "template";
-import NotFound from "components/NotFound";
+import * as React from "react";
+import { renderToString } from "react-dom/server";
+import { matchPath, StaticRouter as Router } from "react-router";
 import Routes from "routes";
+import template from "template";
 
 const routes = [
   "/",
@@ -29,8 +29,8 @@ app.get("*", (req, res) => {
     null
   );
   if (!match) {
-    const markup = renderToString(<NotFound />);
-    res.status(404).send(markup);
+    const m = renderToString(<NotFound />);
+    res.status(404).send(m);
   }
   const context = {};
   const markup = renderToString(
@@ -40,5 +40,6 @@ app.get("*", (req, res) => {
   );
   res.send(template({ markup, title: "" }));
 });
-
+/* tslint:disable:no-console */
 app.listen(3000, () => console.log("listening on port 3000"));
+/* tslint:enable:no-console */

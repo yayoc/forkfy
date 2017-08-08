@@ -31,9 +31,9 @@ const About = asyncComponent(() =>
 );
 
 export default {
-  Top,
+  About,
   Categories,
-  Playlists,
   Friends,
-  About
+  Playlists,
+  Top
 };

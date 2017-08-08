@@ -1,11 +1,11 @@
-import * as React from "react";
-import { Switch, Route } from "react-router-dom";
 import Header from "components/Header";
-import Top from "containers/Top";
 import About from "containers/About";
 import Categories from "containers/Categories";
-import Playlists from "containers/Playlists";
 import Friends from "containers/Friends";
+import Playlists from "containers/Playlists";
+import Top from "containers/Top";
+import * as React from "react";
+import {Route, Switch } from "react-router-dom";
 
 export default () =>
   <div>

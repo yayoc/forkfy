@@ -2,10 +2,10 @@ import * as React from "react";
 
 export default function asyncComponent(getComponent: () => Promise<any>) {
   return class AsyncComponent extends React.Component {
-    static Component: typeof React.Component | null = null;
-    state = { Component: AsyncComponent.Component };
+    private static Component: typeof React.Component | null = null;
+    public state = { Component: AsyncComponent.Component };
 
-    componentWillMount() {
+    public componentWillMount() {
       if (!this.state.Component) {
         getComponent().then(Component => {
           AsyncComponent.Component = Component;
@@ -13,7 +13,7 @@ export default function asyncComponent(getComponent: () => Promise<any>) {
         });
       }
     }
-    render() {
+    public render() {
       const { Component } = this.state;
       if (Component) {
         return <Component {...this.props} />;

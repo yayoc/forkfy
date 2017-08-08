@@ -1,4 +1,4 @@
-import { fork, Effect } from "redux-saga/effects";
+import { Effect, fork } from "redux-saga/effects";
 
 type SagaIterator = IterableIterator<Effect | Effect[]>;
 

@@ -1,19 +1,19 @@
 import * as React from "react";
 
-interface Props {
+interface IProps {
   load: () => Promise<any>;
 }
 
-interface State {
+interface IState {
   component: JSX.Element;
 }
 
-export default class Chunk extends React.Component<Props, State> {
-  componentWillMount() {
+export default class Chunk extends React.Component<IProps, IState> {
+  public componentWillMount() {
     this.load(this.props);
   }
 
-  load = (props: Props) => {
+  public load = (props: IProps) => {
     props.load().then(module => {
       this.setState({
         component: module.default ? module.default : module
@@ -21,7 +21,7 @@ export default class Chunk extends React.Component<Props, State> {
     });
   };
 
-  render() {
+  public render() {
     const { component } = this.state;
     return component || null;
   }
