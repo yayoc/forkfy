@@ -1,8 +1,8 @@
 import * as React from "react";
 
-export default function asyncComponent(getComponent) {
+export default function asyncComponent(getComponent: () => Promise<any>) {
   return class AsyncComponent extends React.Component {
-    static Component = null;
+    static Component: typeof React.Component | null = null;
     state = { Component: AsyncComponent.Component };
 
     componentWillMount() {

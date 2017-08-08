@@ -1,12 +1,12 @@
-import express from "express";
-import React from "react";
+import * as express from "express";
+import * as React from "react";
 import { renderToString } from "react-dom/server";
-import morgan from "morgan";
-import path from "path";
+import * as morgan from "morgan";
+import * as path from "path";
 import { StaticRouter as Router, matchPath } from "react-router";
+import template from "template";
 import NotFound from "components/NotFound";
 import Routes from "routes";
-import template from "template";
 
 const routes = [
   "/",
@@ -25,7 +25,7 @@ app.use(morgan("combined"));
 
 app.get("*", (req, res) => {
   const match = routes.reduce(
-    (acc, route) => matchPath(req.url, route, { exact: true }) || acc,
+    (acc, route) => matchPath(req.url, { path: route, exact: true }) || acc,
     null
   );
   if (!match) {

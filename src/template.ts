@@ -1,4 +1,9 @@
-export default ({ markup, title }) => {
+interface template {
+  markup: string;
+  title: string;
+}
+
+export default ({ markup, title }: template) => {
   return `
     <!doctype html>
     <html>

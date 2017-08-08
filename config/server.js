@@ -6,7 +6,7 @@ const path = require("path");
 module.exports = {
   context: CommonConfig.srcPath,
   target: "node",
-  entry: "./server",
+  entry: "./server.tsx",
   output: {
     path: CommonConfig.distPath,
     filename: "server.js"
@@ -17,12 +17,13 @@ module.exports = {
   },
   resolve: {
     modules: [path.resolve(__dirname, "../node_modules"), CommonConfig.srcPath],
-    extensions: ["*", ".js", ".json"]
+    extensions: ["*", ".js", ".json", ".ts", ".tsx"]
   },
   module: {
     rules: [
       CommonConfig.BabelLoaderRule,
-      CommonConfig.IsomorphicStyleLoaderRule
+      CommonConfig.IsomorphicStyleLoaderRule,
+      { test: /\.tsx?$/, loader: "awesome-typescript-loader" }
     ]
   },
   externals: nodeExternals(),
