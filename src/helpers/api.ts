@@ -6,12 +6,12 @@ const queryParams = (params: { [key: string]: any }) => {
     .join("&");
 };
 
-interface IFetchRequest {
+interface FetchRequest {
   endpoint: string;
   params?: object;
 }
 
-export function fetchFromAPI({ endpoint, params }: IFetchRequest) {
+export function fetchFromAPI({ endpoint, params }: FetchRequest) {
   let url = [API_ROOT, endpoint].join("/");
   if (params) {
     url += (url.indexOf("?") === -1 ? "?" : "&") + queryParams(params);

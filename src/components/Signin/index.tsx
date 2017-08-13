@@ -1,5 +1,5 @@
 import * as React from "react";
-import { callbackUrl, clientId } from "../../constants";
+import { accessTokenKey, callbackUrl, clientId } from "../../constants";
 
 export default class extends React.Component<
   { location: { [key: string]: any } },
@@ -20,6 +20,7 @@ export default class extends React.Component<
       if (hash !== "") {
         const h = hash.slice(1);
         const parsed = parser(h);
+        localStorage.setItem(accessTokenKey, parsed.access_token);
       }
     }
   }
