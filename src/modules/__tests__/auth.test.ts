@@ -1,3 +1,5 @@
+import { ActionWithoutPayload, ActionWithPayload } from "helpers/types";
+import { Me } from "types";
 import reducer, { actions, Types } from "../auth";
 
 describe("auth module", () => {
@@ -22,20 +24,17 @@ describe("auth module", () => {
     beforeAll(() => {
       state = { accessToken: null, me: null, isLoading: false };
     });
-    it("should return a initial state", () => {
-      const expected = { accessToken: null, me: null, isLoading: false };
-      expect(reducer(undefined, {})).toEqual(expected);
-    });
     it("should return a state with an access token", () => {
       const accessToken = "SomeTokenString";
-      const action = {
+      const type = Types.SET_ACCESS_TOKEN;
+      const action: ActionWithPayload<Types.SET_ACCESS_TOKEN, string> = {
         payload: accessToken,
-        type: Types.SET_ACCESS_TOKEN
+        type
       };
       expect(reducer(undefined, action)).toEqual({ ...state, accessToken });
     });
     it("should return a state with loading.", () => {
-      const action = {
+      const action: ActionWithoutPayload<Types.FETCH_ME_REQUEST> = {
         type: Types.FETCH_ME_REQUEST
       };
       expect(reducer(undefined, action)).toEqual({ ...state, isLoading: true });
@@ -67,7 +66,7 @@ describe("auth module", () => {
         type: "user",
         uri: "spotify:user:wizzler"
       };
-      const action = {
+      const action: ActionWithPayload<Types.FETCH_ME_SUCCESS, Me> = {
         payload: me,
         type: Types.FETCH_ME_SUCCESS
       };
