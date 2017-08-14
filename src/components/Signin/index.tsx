@@ -1,8 +1,11 @@
+import { actions } from "modules/auth";
 import * as React from "react";
+import { connect } from "react-redux";
+import { Dispatch } from "redux";
 import { accessTokenKey, callbackUrl, clientId } from "../../constants";
 
-export default class extends React.Component<
-  { location: { [key: string]: any } },
+class Signin extends React.Component<
+  { location: { [key: string]: any }; setAccessToken: (token: string) => void },
   {}
 > {
   public componentWillMount() {
@@ -20,7 +23,7 @@ export default class extends React.Component<
       if (hash !== "") {
         const h = hash.slice(1);
         const parsed = parser(h);
-        localStorage.setItem(accessTokenKey, parsed.access_token);
+        this.props.setAccessToken(parsed.access_token);
       }
     }
   }
@@ -33,3 +36,13 @@ export default class extends React.Component<
     );
   }
 }
+
+const mapDispatchToProps = (dispatch: Dispatch<string>) => {
+  return {
+    setAccessToken: (token: string): void => {
+      dispatch(actions.setAccessToken(token));
+    }
+  };
+};
+
+export default connect(undefined, mapDispatchToProps)(Signin);

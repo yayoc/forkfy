@@ -32,3 +32,9 @@ export function searchPlaylist(q: string): Promise<any> {
     }
   });
 }
+
+export function getMe(): Promise<any> {
+  return fetchFromAPI({
+    endpoint: "me"
+  });
+}
