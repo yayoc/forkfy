@@ -1,5 +1,6 @@
 import { ActionWithoutPayload, ActionWithPayload } from "client/helpers/types";
 import { Me } from "client/types";
+import { ReduxState } from "client/helpers/types";
 
 // - Types
 
@@ -38,7 +39,7 @@ export const actions = {
 
 // - Reducer
 
-interface State {
+export interface State {
   accessToken: string | null;
   me: Me | null;
   isLoading: boolean;
@@ -68,3 +69,6 @@ export default (state: State = initialState, action: Actions): State => {
 };
 
 // - Selector
+
+export const getAuth = (state: ReduxState) => state.auth;
+
