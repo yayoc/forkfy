@@ -1,12 +1,14 @@
-import NotFound from "components/NotFound";
 import * as express from "express";
 import * as morgan from "morgan";
 import * as path from "path";
 import * as React from "react";
 import { renderToString } from "react-dom/server";
 import { matchPath, StaticRouter as Router } from "react-router";
-import Routes from "routes";
-import template from "template";
+import { Provider } from "react-redux";
+import template from "server/template";
+import NotFound from "client/components/NotFound";
+import Routes from "client/routes";
+import configureStore from "client/store";
 
 const routes = [
   "/",
@@ -33,10 +35,13 @@ app.get("*", (req, res) => {
     res.status(404).send(m);
   }
   const context = {};
+  const store = configureStore();
   const markup = renderToString(
-    <Router location={req.url} context={context}>
-      <Routes />
-    </Router>
+    <Provider store={store}>
+      <Router location={req.url} context={context}>
+        <Routes />
+      </Router>
+    </Provider>
   );
   res.send(template({ markup, title: "" }));
 });

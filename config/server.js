@@ -6,7 +6,7 @@ const path = require("path");
 module.exports = {
   context: CommonConfig.srcPath,
   target: "node",
-  entry: "./server.tsx",
+  entry: "./server/server.tsx",
   output: {
     path: CommonConfig.distPath,
     filename: "server.js"

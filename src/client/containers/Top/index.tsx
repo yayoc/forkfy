@@ -1,4 +1,4 @@
-import Signin from "components/Signin";
+import Signin from "client/components/Signin";
 import * as React from "react";
 import { callbackUrl, clientId } from "../../constants";
 

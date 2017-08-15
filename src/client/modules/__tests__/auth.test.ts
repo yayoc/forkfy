@@ -1,5 +1,5 @@
-import { ActionWithoutPayload, ActionWithPayload } from "helpers/types";
-import { Me } from "types";
+import { ActionWithoutPayload, ActionWithPayload } from "client/helpers/types";
+import { Me } from "client/types";
 import reducer, { actions, Types } from "../auth";
 
 describe("auth module", () => {

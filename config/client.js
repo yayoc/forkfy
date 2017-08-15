@@ -5,7 +5,7 @@ const path = require("path");
 module.exports = {
   context: CommonConfig.srcPath,
   target: "web",
-  entry: "./client.tsx",
+  entry: "./client/client.tsx",
   output: {
     path: CommonConfig.distPath,
     filename: "client.js",

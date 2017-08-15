@@ -1,6 +1,6 @@
-import { getMe } from "helpers/api";
-import { ActionWithPayload } from "helpers/types";
-import { actions, Types } from "modules/auth";
+import { getMe } from "client/helpers/api";
+import { ActionWithPayload } from "client/helpers/types";
+import { actions, Types } from "client/modules/auth";
 import { takeEvery } from "redux-saga";
 import { call, Effect, put } from "redux-saga/effects";
 import { SagaIterator } from "./index";
