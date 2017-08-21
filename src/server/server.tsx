@@ -9,6 +9,7 @@ import template from "server/template";
 import NotFound from "client/components/NotFound";
 import Routes from "client/routes";
 import configureStore from "client/store";
+import { getMe, searchPlaylists } from "server/api";
 
 const routes = [
   "/",
@@ -24,6 +25,41 @@ app.set("view engine", "ejs");
 app.set("views", path.dirname);
 app.use("/static", express.static("./dist"));
 app.use(morgan("combined"));
+
+const requireAuthentication = (req: any, res: any, next: () => void) => {
+  const authorizationHeader = req.get("Authorization");
+  if (!authorizationHeader) {
+    res.status(500).render("error", {});
+    return;
+  }
+  const [type, token] = authorizationHeader.split(" ");
+
+  if (type !== "Bearer" || !token) {
+    res.status(500).render("error", {});
+    return;
+  }
+  req.token = token;
+  next();
+};
+
+app.all("/api/*", requireAuthentication);
+
+interface AuthorizedReq {
+  token: string;
+}
+
+app.get("/api/me", (req, res, next) => {
+  getMe((req as any).token).then(data => {
+    res.send(data);
+  });
+});
+
+app.get("/api/search", (req, res, next) => {
+  const q = req.get("q") as string;
+  searchPlaylists((req as any).token, q).then(data => {
+    res.send(data);
+  });
+});
 
 app.get("*", (req, res) => {
   const match = routes.reduce(
