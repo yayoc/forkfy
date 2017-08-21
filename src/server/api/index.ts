@@ -1,4 +1,6 @@
-const API_ROOT = "http://localhost:3000/api";
+import fetch from "node-fetch";
+
+const SPOTIFY_API_ROOT = "https://api.spotify.com/v1";
 
 const queryParams = (params: { [key: string]: any }) => {
   return Object.keys(params)
@@ -13,7 +15,7 @@ interface FetchRequest {
 }
 
 export function fetchFromAPI({ endpoint, accessToken, params }: FetchRequest) {
-  let url = [API_ROOT, endpoint].join("/");
+  let url = [SPOTIFY_API_ROOT, endpoint].join("/");
   if (params) {
     url += (url.indexOf("?") === -1 ? "?" : "&") + queryParams(params);
   }
@@ -23,26 +25,19 @@ export function fetchFromAPI({ endpoint, accessToken, params }: FetchRequest) {
     Authorization: `Bearer ${accessToken}`
   };
   return fetch(url, {
-    credentials: "include",
     headers,
     method: "GET"
   }).then(response => response.json());
 }
 
-export function searchPlaylist(accessToken: string, q: string): Promise<any> {
-  return fetchFromAPI({
-    accessToken,
-    endpoint: "search",
-    params: {
-      q,
-      type: "playlist"
-    }
-  });
+export function getMe(accessToken: string): Promise<any> {
+  return fetchFromAPI({ endpoint: "me", accessToken });
 }
 
-export function getMe(accessToken: string): Promise<any> {
+export function searchPlaylists(accessToken: string, q: string): Promise<any> {
   return fetchFromAPI({
+    endpoint: "search",
     accessToken,
-    endpoint: "me"
+    params: { q, type: "playlist" }
   });
 }
