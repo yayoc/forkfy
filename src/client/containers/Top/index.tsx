@@ -6,12 +6,15 @@ import { callbackUrl, clientId } from "../../constants";
 import { getAuth, State as AuthState, actions } from "client/modules/auth";
 import {
   State as SearchState,
-  actions as searchActions
+  actions as searchActions,
+  getPlaylists
 } from "client/modules/search";
+import { Playlists } from "client/types";
 import { ReduxState } from "client/helpers/types";
 
 interface StateProps {
-  auth: AuthState;
+  authState: AuthState;
+  playlists: Playlists | null;
 }
 
 interface OwnProps {
@@ -36,14 +39,27 @@ class Top extends React.Component<OwnProps & StateProps & DispatchProps> {
   };
 
   public render() {
-    const { auth } = this.props;
+    const { authState, playlists } = this.props;
     return (
       <div>
         <h1>Top</h1>
-        {auth.accessToken
+        {authState.accessToken
           ? <div>
               <input onChange={this.onChage} value={this.state.q} />
               <button onClick={this.onClick}>Search</button>
+              {playlists &&
+                <div>
+                  {playlists.items.map(i => {
+                    return (
+                      <div>
+                        <img src={i.images[0].url} width={300} height={300} />
+                        <p>
+                          {i.name}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>}
             </div>
           : <Signin {...this.props} />}
       </div>
@@ -52,8 +68,9 @@ class Top extends React.Component<OwnProps & StateProps & DispatchProps> {
 }
 
 const mapStateToProps = (state: ReduxState): StateProps => {
-  const auth = getAuth(state);
-  return { auth };
+  const authState = getAuth(state);
+  const playlists = getPlaylists(state);
+  return { authState, playlists };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<string>): DispatchProps => {

@@ -13,7 +13,7 @@ function* doSearchSaga(
     const q = action.payload;
     const auth = yield select(getAuth);
     const res = yield call(searchPlaylist, auth.accessToken, q);
-    yield put(actions.searchSuccess(res));
+    yield put(actions.searchSuccess(res.playlists));
   } catch (e) {
     yield put(actions.searchFailed(e));
   }

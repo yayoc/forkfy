@@ -1,5 +1,7 @@
 import { ActionWithoutPayload, ActionWithPayload } from "client/helpers/types";
 import { Playlists } from "client/types";
+import { ReduxState } from "client/helpers/types";
+import { createSelector } from "reselect";
 
 // - Types
 
@@ -48,8 +50,9 @@ export default (state: State = initialState, action: Actions) => {
     case Types.SEARCH_REQUEST: {
       return { ...state, isLoading: true };
     }
-    case Types.SEARCH_FAILED: {
-      return { ...state, isLoading: false };
+    case Types.SEARCH_SUCCESS: {
+      const playlists = action.payload;
+      return { ...state, isLoading: false, playlists };
     }
     case Types.SEARCH_FAILED: {
       return { ...state, isLoading: false };
@@ -60,3 +63,9 @@ export default (state: State = initialState, action: Actions) => {
 };
 
 // - Selector
+
+export const getSearch = (state: ReduxState) => state.search;
+
+export const getPlaylists = createSelector([getSearch], search => {
+  return search.playlists;
+});
