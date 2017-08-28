@@ -6,6 +6,21 @@ const queryParams = (params: { [key: string]: any }) => {
     .join("&");
 };
 
+export function getQueryParams(url: string): { [key: string]: any } {
+  return url
+    .replace(/^.*\?/, "")
+    .split("&")
+    .reduce((acc: { [key: string]: any }, s) => {
+      const splitted = s.split("=");
+      const key = splitted[0];
+      const value = splitted[1];
+      if (value) {
+        acc[key] = value;
+      }
+      return acc;
+    }, {});
+}
+
 interface FetchRequest {
   endpoint: string;
   accessToken: string;
@@ -29,12 +44,17 @@ export function fetchFromAPI({ endpoint, accessToken, params }: FetchRequest) {
   }).then(response => response.json());
 }
 
-export function searchPlaylist(accessToken: string, q: string): Promise<any> {
+export function searchPlaylist(
+  accessToken: string,
+  q: string,
+  offset: number = 0
+): Promise<any> {
   return fetchFromAPI({
     accessToken,
     endpoint: "search",
     params: {
       q,
+      offset,
       type: "playlist"
     }
   });

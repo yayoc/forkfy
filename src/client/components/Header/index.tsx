@@ -6,10 +6,7 @@ const s = require("./Header.scss");
 function Header() {
   return (
     <header className={s.header}>
-      <NavLink to="/">Top</NavLink>
-      <NavLink to="/categories/toplists/playlists">Categories</NavLink>
-      <NavLink to="/friends">Friends</NavLink>
-      <NavLink to="/about">About</NavLink>
+      <NavLink to="/">Forkfy</NavLink>
     </header>
   );
 }

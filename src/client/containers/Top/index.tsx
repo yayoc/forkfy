@@ -2,19 +2,25 @@ import Signin from "client/components/Signin";
 import * as React from "react";
 import { Dispatch } from "redux";
 import { connect, MapStateToProps } from "react-redux";
+import * as Waypoint from "react-waypoint";
 import { callbackUrl, clientId } from "../../constants";
 import { getAuth, State as AuthState, actions } from "client/modules/auth";
 import {
   State as SearchState,
   actions as searchActions,
-  getPlaylists
+  getPlaylists,
+  getSearch
 } from "client/modules/search";
-import { Playlists } from "client/types";
+import { Playlists, Item } from "client/types";
 import { ReduxState } from "client/helpers/types";
+import Playlist from "client/components/Playlist";
+
+const s = require("./Top.scss");
 
 interface StateProps {
   authState: AuthState;
-  playlists: Playlists | null;
+  playlists: Array<Item>;
+  isLoading: boolean;
 }
 
 interface OwnProps {
@@ -23,10 +29,11 @@ interface OwnProps {
 
 interface DispatchProps {
   search: (q: string) => void;
+  searchMore: () => void;
 }
 
 class Top extends React.Component<OwnProps & StateProps & DispatchProps> {
-  state = {
+  public state = {
     q: ""
   };
   public onChage = (e: React.FormEvent<HTMLInputElement>) => {
@@ -38,27 +45,33 @@ class Top extends React.Component<OwnProps & StateProps & DispatchProps> {
     search(this.state.q);
   };
 
+  public searchMore = () => {
+    const { searchMore, isLoading } = this.props;
+    if (!isLoading) {
+      searchMore();
+    }
+  };
+
   public render() {
-    const { authState, playlists } = this.props;
+    const { authState, playlists, search } = this.props;
     return (
-      <div>
-        <h1>Top</h1>
+      <div className={s.content}>
+        <h1>Search</h1>
         {authState.accessToken
           ? <div>
-              <input onChange={this.onChage} value={this.state.q} />
-              <button onClick={this.onClick}>Search</button>
-              {playlists &&
-                <div>
-                  {playlists.items.map(i => {
-                    return (
-                      <div>
-                        <img src={i.images[0].url} width={300} height={300} />
-                        <p>
-                          {i.name}
-                        </p>
-                      </div>
-                    );
-                  })}
+              <input
+                className={s.input}
+                onChange={this.onChage}
+                value={this.state.q}
+                placeholder="Artist name, keyword.. "
+              />
+              <button className={s.button} onClick={this.onClick}>
+                Search
+              </button>
+              {playlists.length > 0 &&
+                <div className={s.playlist}>
+                  {playlists.map(i => <Playlist playlist={i} />)}
+                  <Waypoint onEnter={this.searchMore} />
                 </div>}
             </div>
           : <Signin {...this.props} />}
@@ -70,13 +83,17 @@ class Top extends React.Component<OwnProps & StateProps & DispatchProps> {
 const mapStateToProps = (state: ReduxState): StateProps => {
   const authState = getAuth(state);
   const playlists = getPlaylists(state);
-  return { authState, playlists };
+  const search = getSearch(state);
+  return { authState, playlists, isLoading: search.isLoading };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<string>): DispatchProps => {
   return {
     search: (q: string) => {
       dispatch(searchActions.searchRequest(q));
+    },
+    searchMore: () => {
+      dispatch(searchActions.searchMoreRequest());
     }
   };
 };

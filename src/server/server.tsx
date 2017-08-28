@@ -56,7 +56,8 @@ app.get("/api/me", (req, res, next) => {
 
 app.get("/api/search", (req, res, next) => {
   const q = req.param("q");
-  searchPlaylists((req as any).token, q).then(data => {
+  const offset = req.param("offset");
+  searchPlaylists((req as any).token, q, offset).then(data => {
     res.send(data);
   });
 });

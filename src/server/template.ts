@@ -3,7 +3,7 @@ interface ITemplate {
   title: string;
 }
 
-export default ({ markup, title }: ITemplate) => {
+export default ({markup, title}: ITemplate) => {
   return `
     <!doctype html>
     <html>
@@ -13,6 +13,11 @@ export default ({ markup, title }: ITemplate) => {
       <meta name="viewport" content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width">
       <link rel="stylesheet" href="/static/client.css">
       <title>${title}</title>
+      <style>
+        html {
+            font-family: sans-serif;
+        }
+      </style>
     </head>
 
     <body>

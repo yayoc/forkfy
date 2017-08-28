@@ -1,0 +1,33 @@
+$border-color: #d9dadc;
+$background-color: #2ebd59;
+$color: #fff;
+
+.content {
+  text-align: center;
+}
+
+.input {
+  border: 1px solid $border-color;
+  border-radius: 5px;
+  height: 30px;
+  margin-right: 5px;
+  padding: 5px;
+  width: 50%;
+}
+
+.button {
+  background-color: $background-color;
+  border: 1px solid transparent;
+  border-radius: 500px;
+  color: $color;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+  padding: 7px 35px;
+  touch-action: manipulation;
+}
+
+.playlist {
+  padding: 25px 0;
+}

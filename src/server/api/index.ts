@@ -34,10 +34,14 @@ export function getMe(accessToken: string): Promise<any> {
   return fetchFromAPI({ endpoint: "me", accessToken });
 }
 
-export function searchPlaylists(accessToken: string, q: string): Promise<any> {
+export function searchPlaylists(
+  accessToken: string,
+  q: string,
+  offset: string = "0"
+): Promise<any> {
   return fetchFromAPI({
     endpoint: "search",
     accessToken,
-    params: { q, type: "playlist" }
+    params: { q, type: "playlist", offset }
   });
 }

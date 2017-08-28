@@ -2,13 +2,18 @@ import { ActionWithoutPayload, ActionWithPayload } from "client/helpers/types";
 import { Playlists } from "client/types";
 import { ReduxState } from "client/helpers/types";
 import { createSelector } from "reselect";
+import { getEntities } from "client/modules/entity";
+import { Item } from "client/types";
 
 // - Types
 
 export enum Types {
   SEARCH_REQUEST = "seach/SEARCH_REQUEST",
   SEARCH_SUCCESS = "seach/SEARCH_SUCCESS",
-  SEARCH_FAILED = "seach/SEARCH_FAILED"
+  SEARCH_FAILED = "seach/SEARCH_FAILED",
+  SEARCH_MORE_REQUEST = "seach/SEARCH_MORE_REQUEST",
+  SEARCH_MORE_SUCCESS = "seach/SEARCH_MORE_SUCCESS",
+  SEARCH_MORE_FAILED = "seach/SEARCH_MORE_FAILED"
 }
 
 // - Actions
@@ -16,33 +21,51 @@ export enum Types {
 type Actions =
   | ActionWithPayload<Types.SEARCH_REQUEST, string>
   | ActionWithPayload<Types.SEARCH_SUCCESS, Playlists>
-  | ActionWithPayload<Types.SEARCH_FAILED, Error>;
+  | ActionWithPayload<Types.SEARCH_FAILED, Error>
+  | ActionWithoutPayload<Types.SEARCH_MORE_REQUEST>
+  | ActionWithPayload<Types.SEARCH_MORE_SUCCESS, Result>
+  | ActionWithPayload<Types.SEARCH_MORE_FAILED, Error>;
 
 export const actions = {
+  searchFailed: (error: Error) => ({
+    payload: error,
+    type: Types.SEARCH_FAILED
+  }),
   searchRequest: (q: string) => ({
-    type: Types.SEARCH_REQUEST,
-    payload: q
+    payload: q,
+    type: Types.SEARCH_REQUEST
   }),
   searchSuccess: (playlists: Playlists) => ({
-    type: Types.SEARCH_SUCCESS,
-    payload: playlists
+    payload: playlists,
+    type: Types.SEARCH_SUCCESS
   }),
-  searchFailed: (error: Error) => ({
-    type: Types.SEARCH_FAILED,
-    payload: error
+  searchMoreFailed: (error: Error) => ({
+    payload: error,
+    type: Types.SEARCH_MORE_FAILED
+  }),
+  searchMoreRequest: () => ({
+    type: Types.SEARCH_MORE_REQUEST
+  }),
+  searchMoreSuccess: (result: Result) => ({
+    payload: result,
+    type: Types.SEARCH_MORE_SUCCESS
   })
 };
 
 // - Reducer
 
+interface Result {
+  items: string[];
+}
+
 export interface State {
   isLoading: boolean;
-  playlists: Playlists | null;
+  result: Result | null;
 }
 
 const initialState: State = {
   isLoading: false,
-  playlists: null
+  result: null
 };
 
 export default (state: State = initialState, action: Actions) => {
@@ -51,12 +74,32 @@ export default (state: State = initialState, action: Actions) => {
       return { ...state, isLoading: true };
     }
     case Types.SEARCH_SUCCESS: {
-      const playlists = action.payload;
-      return { ...state, isLoading: false, playlists };
+      const result = action.payload;
+      return {
+        ...state,
+        isLoading: false,
+        result
+      };
     }
     case Types.SEARCH_FAILED: {
       return { ...state, isLoading: false };
     }
+    case Types.SEARCH_MORE_REQUEST: {
+      return { ...state, isLoading: true };
+    }
+    case Types.SEARCH_MORE_SUCCESS: {
+      const result = action.payload;
+      const items = state.result ? state.result.items : [];
+      return {
+        ...state,
+        result: {
+          ...result,
+          items: items.concat(result.items)
+        },
+        isLoading: false
+      };
+    }
+
     default:
       return state;
   }
@@ -66,6 +109,13 @@ export default (state: State = initialState, action: Actions) => {
 
 export const getSearch = (state: ReduxState) => state.search;
 
-export const getPlaylists = createSelector([getSearch], search => {
-  return search.playlists;
-});
+export const getPlaylists = createSelector(
+  [getSearch, getEntities],
+  (search: any, entity: any) => {
+    return search.result && entity.entities
+      ? search.result.items
+          .map((i: string) => entity.entities.items[i])
+          .filter((i: Item) => i !== undefined)
+      : [];
+  }
+);

@@ -1,4 +1,18 @@
+$backgrond-color: #fff;
+$border-color: #d9dadc;
+$color: #2e2f33;
+
 .header {
-  background: #ddd;
-  height: 30px;
+  background: $backgrond-color;
+  border-bottom: 1px solid $border-color;
+  padding: 10px 0;
+  text-align: center;
+
+  a {
+    color: $color;    
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 24px;
+    text-decoration: none;
+  }
 }
