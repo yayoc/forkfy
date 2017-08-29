@@ -12,7 +12,7 @@ export enum Types {
 type Actions = ActionWithPayload<Types.SET_ENTITIES, Entities>;
 
 interface Entities {
-  items: Object;
+  items: { [key: string]: any };
 }
 
 export const actions = {
@@ -36,11 +36,11 @@ export default (state: State = initialState, action: Actions): State => {
   switch (action.type) {
     case Types.SET_ENTITIES: {
       const entities = action.payload;
-      const current = state.entities ? state.entities.items : {};
+      const currentItems = state.entities ? state.entities.items : {};
       return {
         ...state,
         entities: {
-          items: Object.assign({}, current, entities.items)
+          items: { ...currentItems, ...entities.items }
         }
       };
     }
