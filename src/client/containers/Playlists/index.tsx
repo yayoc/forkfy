@@ -18,10 +18,15 @@ interface OwnProps {
 }
 
 interface DispatchProps {
-  fork: (id: string) => void;
+  fork: () => void;
 }
 
 class Playlists extends React.Component<OwnProps & StateProps & DispatchProps> {
+  public fork = () => {
+    const { fork } = this.props;
+    fork();
+  };
+
   public render() {
     const { playlist } = this.props;
     return (
@@ -32,6 +37,7 @@ class Playlists extends React.Component<OwnProps & StateProps & DispatchProps> {
             <p>
               {playlist.name}
             </p>
+            <button onClick={this.fork}>Fork this playlist</button>
           </div>}
       </div>
     );
@@ -46,7 +52,10 @@ const mapStateToProps = (state: ReduxState, ownProps: OwnProps) => {
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<string>): DispatchProps => {
+const mapDispatchToProps = (
+  dispatch: Dispatch<string>,
+  ownProps: OwnProps
+): DispatchProps => {
   return {
     fork: () => {}
   };
