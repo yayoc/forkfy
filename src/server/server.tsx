@@ -9,7 +9,12 @@ import template from "server/template";
 import NotFound from "client/components/NotFound";
 import Routes from "client/routes";
 import configureStore from "client/store";
-import { getMe, searchPlaylists } from "server/api";
+import {
+  getMe,
+  searchPlaylists,
+  createPlaylist,
+  addTracksToPlaylist
+} from "server/api";
 
 const routes = [
   "/",
@@ -61,6 +66,40 @@ app.get("/api/search", (req, res, next) => {
     res.send(data);
   });
 });
+
+app.post("/api/users/:userId/playlists", (req, res, next) => {
+  const userId = req.param("userId");
+  const name = req.param("name");
+  const isPublic = req.param("public") === "true";
+  const collaborative = req.param("collaborative") === "true";
+  const description = req.param("description");
+  createPlaylist(
+    (req as any).token,
+    userId,
+    name,
+    isPublic,
+    collaborative,
+    description
+  ).then(data => {
+    res.send(data);
+  });
+});
+
+app.post(
+  "/api/users/:userId/playlists/:playlistId/tracks",
+  (req, res, next) => {
+    const userId = req.param("userId");
+    const playlistId = req.param("playlistId");
+    const uris = req.param("uris");
+
+    addTracksToPlaylist(
+      (req as any).token,
+      userId,
+      playlistId,
+      uris
+    ).then(data => res.send(data));
+  }
+);
 
 app.get("*", (req, res) => {
   const match = routes.reduce(
