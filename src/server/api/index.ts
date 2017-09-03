@@ -2,7 +2,7 @@ import fetch from "node-fetch";
 
 const SPOTIFY_API_ROOT = "https://api.spotify.com/v1";
 
-const queryParams = (params: {[key: string]: any}) => {
+const queryParams = (params: { [key: string]: any }) => {
   return Object.keys(params)
     .map(k => encodeURIComponent(k) + "=" + encodeURIComponent(params[k]))
     .join("&");
@@ -14,7 +14,7 @@ interface FetchRequest {
   params?: object;
 }
 
-export function fetchFromAPI({endpoint, accessToken, params}: FetchRequest) {
+export function fetchFromAPI({ endpoint, accessToken, params }: FetchRequest) {
   let url = [SPOTIFY_API_ROOT, endpoint].join("/");
   if (params) {
     url += (url.indexOf("?") === -1 ? "?" : "&") + queryParams(params);
@@ -22,11 +22,11 @@ export function fetchFromAPI({endpoint, accessToken, params}: FetchRequest) {
   const headers = {
     Accept: "application/json",
     "Content-Type": "application/json",
-    Authorization: `Bearer ${accessToken}`,
+    Authorization: `Bearer ${accessToken}`
   };
   return fetch(url, {
     headers,
-    method: "GET",
+    method: "GET"
   }).then(response => response.json());
 }
 
@@ -36,22 +36,30 @@ interface PostRequest {
   body?: object;
 }
 
-export function postToAPI({endpoint, accessToken, body}: PostRequest) {
+export function postToAPI({ endpoint, accessToken, body }: PostRequest) {
   const url = [SPOTIFY_API_ROOT, endpoint].join("/");
   const headers = {
     Accept: "application/json",
     "Content-Type": "application/json",
-    Authorization: `Bearer ${accessToken}`,
+    Authorization: `Bearer ${accessToken}`
   };
   return fetch(url, {
     headers,
     method: "POST",
-    body: JSON.stringify(body),
+    body: JSON.stringify(body)
   }).then(response => response.json());
 }
 
 export function getMe(accessToken: string): Promise<any> {
-  return fetchFromAPI({endpoint: "me", accessToken});
+  return fetchFromAPI({ endpoint: "me", accessToken });
+}
+
+export function getPlaylistTracks(
+  accessToken: string,
+  userId: string,
+  playlistId: string
+): Promise<any> {
+  return fetchFromAPI({ endpoint: `users/${userId}/playlists/${playlistId}/tracks`, accessToken });
 }
 
 export function searchPlaylists(
@@ -62,7 +70,7 @@ export function searchPlaylists(
   return fetchFromAPI({
     endpoint: "search",
     accessToken,
-    params: {q, type: "playlist", offset},
+    params: { q, type: "playlist", offset }
   });
 }
 
@@ -78,25 +86,30 @@ export function createPlaylist(
     name,
     public: isPublic,
     collaborative,
-    description,
+    description
   };
-  return postToAPI({endpoint: `users/${userId}/playlists`, accessToken, body});
+  console.log(accessToken);
+  return postToAPI({
+    endpoint: `users/${userId}/playlists`,
+    accessToken,
+    body
+  });
 }
 
 export function addTracksToPlaylist(
   accessToken: string,
   userId: string,
   playlistId: string,
-  uris: string,
+  uris: Array<string>,
   position: number = 0
 ): Promise<any> {
   const body = {
     uris,
-    position,
+    position
   };
   return postToAPI({
     endpoint: `users/${userId}/playlists/${playlistId}/tracks`,
     accessToken,
-    body,
+    body
   });
 }

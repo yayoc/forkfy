@@ -5,6 +5,7 @@ import * as React from "react";
 import { renderToString } from "react-dom/server";
 import { matchPath, StaticRouter as Router } from "react-router";
 import { Provider } from "react-redux";
+import * as bodyParser from "body-parser";
 import template from "server/template";
 import NotFound from "client/components/NotFound";
 import Routes from "client/routes";
@@ -13,7 +14,8 @@ import {
   getMe,
   searchPlaylists,
   createPlaylist,
-  addTracksToPlaylist
+  addTracksToPlaylist,
+  getPlaylistTracks
 } from "server/api";
 
 const routes = [
@@ -30,6 +32,7 @@ app.set("view engine", "ejs");
 app.set("views", path.dirname);
 app.use("/static", express.static("./dist"));
 app.use(morgan("combined"));
+app.use(bodyParser.json());
 
 const requireAuthentication = (req: any, res: any, next: () => void) => {
   const authorizationHeader = req.get("Authorization");
@@ -68,8 +71,12 @@ app.get("/api/search", (req, res, next) => {
 });
 
 app.post("/api/users/:userId/playlists", (req, res, next) => {
+  // TODO: need to add tracks
+  const accessToken = (req as any).token;
+  const ownUserId = req.body.ownUserId;
   const userId = req.param("userId");
-  const name = req.param("name");
+  const playlistId = req.body.playlistId;
+  const name = "This is sample";
   const isPublic = req.param("public") === "true";
   const collaborative = req.param("collaborative") === "true";
   const description = req.param("description");
@@ -81,25 +88,21 @@ app.post("/api/users/:userId/playlists", (req, res, next) => {
     collaborative,
     description
   ).then(data => {
-    res.send(data);
+    const createdPlaylistId = data.id;
+    getPlaylistTracks(accessToken, ownUserId, playlistId).then(data => {
+      const uris = data.items.map((i: any) => i.track.uri);
+      console.log(uris);
+      addTracksToPlaylist(
+        accessToken,
+        userId,
+        createdPlaylistId,
+        uris
+      ).then(data => {
+        console.log(data);
+      });
+    });
   });
 });
-
-app.post(
-  "/api/users/:userId/playlists/:playlistId/tracks",
-  (req, res, next) => {
-    const userId = req.param("userId");
-    const playlistId = req.param("playlistId");
-    const uris = req.param("uris");
-
-    addTracksToPlaylist(
-      (req as any).token,
-      userId,
-      playlistId,
-      uris
-    ).then(data => res.send(data));
-  }
-);
 
 app.get("*", (req, res) => {
   const match = routes.reduce(

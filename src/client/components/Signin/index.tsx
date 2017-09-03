@@ -28,7 +28,9 @@ class Signin extends React.Component<
     }
   }
   public render() {
-    const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&redirect_uri=${callbackUrl}`;
+    const scopes =
+      "playlist-read-private playlist-read-collaborative playlist-modify-public playlist-modify-private";
+    const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&redirect_uri=${callbackUrl}&scope=${scopes}`;
     return (
       <div>
         <a href={authUrl}>Signin</a>

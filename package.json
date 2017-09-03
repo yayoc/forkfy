@@ -16,7 +16,9 @@
     "test": "jest"
   },
   "dependencies": {
+    "@types/body-parser": "^1.16.5",
     "@types/node-fetch": "^1.6.7",
+    "body-parser": "^1.17.2",
     "ejs": "^2.5.7",
     "express": "^4.15.3",
     "flexboxgrid": "^6.3.1",

@@ -4,6 +4,7 @@ import { connect, MapStateToProps } from "react-redux";
 import { match } from "react-router";
 import { ReduxState } from "client/helpers/types";
 import { Item } from "client/types";
+import { actions } from "client/modules/playlist";
 
 interface StateProps {
   playlist: Item;
@@ -18,27 +19,27 @@ interface OwnProps {
 }
 
 interface DispatchProps {
-  fork: () => void;
+  fork: (ownUserId: string) => void;
 }
 
 class Playlists extends React.Component<OwnProps & StateProps & DispatchProps> {
   public fork = () => {
-    const { fork } = this.props;
-    fork();
+    const { fork, playlist } = this.props;
+    debugger;
+    fork(playlist.owner.id);
   };
 
   public render() {
     const { playlist } = this.props;
     return (
       <div>
-        {playlist &&
+        {playlist && (
           <div>
             <img src={playlist.images[0].url} width={300} height={300} />
-            <p>
-              {playlist.name}
-            </p>
+            <p>{playlist.name}</p>
             <button onClick={this.fork}>Fork this playlist</button>
-          </div>}
+          </div>
+        )}
       </div>
     );
   }
@@ -57,7 +58,11 @@ const mapDispatchToProps = (
   ownProps: OwnProps
 ): DispatchProps => {
   return {
-    fork: () => {}
+    fork: (ownUserId: string) => {
+      dispatch(
+        actions.forkRequest(ownProps.match.params.playlistId, ownUserId)
+      );
+    }
   };
 };
 
