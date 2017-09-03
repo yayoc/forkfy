@@ -54,12 +54,26 @@ export function getMe(accessToken: string): Promise<any> {
   return fetchFromAPI({ endpoint: "me", accessToken });
 }
 
+export function getPlaylist(
+  accessToken: string,
+  userId: string,
+  playlistId: string
+) {
+  return fetchFromAPI({
+    endpoint: `users/${userId}/playlists/${playlistId}`,
+    accessToken
+  });
+}
+
 export function getPlaylistTracks(
   accessToken: string,
   userId: string,
   playlistId: string
 ): Promise<any> {
-  return fetchFromAPI({ endpoint: `users/${userId}/playlists/${playlistId}/tracks`, accessToken });
+  return fetchFromAPI({
+    endpoint: `users/${userId}/playlists/${playlistId}/tracks`,
+    accessToken
+  });
 }
 
 export function searchPlaylists(

@@ -15,7 +15,8 @@ import {
   searchPlaylists,
   createPlaylist,
   addTracksToPlaylist,
-  getPlaylistTracks
+  getPlaylistTracks,
+  getPlaylist
 } from "server/api";
 
 const routes = [
@@ -70,38 +71,44 @@ app.get("/api/search", (req, res, next) => {
   });
 });
 
+async function forkPlaylist(
+  accessToken: string,
+  userId: string,
+  playlistId: string,
+  ownUserId: string
+) {
+  try {
+    const playlist = await getPlaylist(accessToken, ownUserId, playlistId);
+    // 1. Create own playlist
+    const myPlaylist = await createPlaylist(
+      accessToken,
+      userId,
+      `forked from ${playlist.name}`,
+      false,
+      false,
+      playlist.description
+    );
+    // 2. Get tracks of the playlist.
+    const uris = playlist.tracks.items.map((i: any) => i.track.uri);
+    // 3. Add tracks into own playlist.
+    return addTracksToPlaylist(accessToken, userId, myPlaylist.id, uris);
+  } catch (e) {
+    return Promise.reject(e);
+  }
+}
+
 app.post("/api/users/:userId/playlists", (req, res, next) => {
-  // TODO: need to add tracks
   const accessToken = (req as any).token;
-  const ownUserId = req.body.ownUserId;
   const userId = req.param("userId");
+  const ownUserId = req.body.ownUserId;
   const playlistId = req.body.playlistId;
-  const name = "This is sample";
-  const isPublic = req.param("public") === "true";
-  const collaborative = req.param("collaborative") === "true";
-  const description = req.param("description");
-  createPlaylist(
-    (req as any).token,
-    userId,
-    name,
-    isPublic,
-    collaborative,
-    description
-  ).then(data => {
-    const createdPlaylistId = data.id;
-    getPlaylistTracks(accessToken, ownUserId, playlistId).then(data => {
-      const uris = data.items.map((i: any) => i.track.uri);
-      console.log(uris);
-      addTracksToPlaylist(
-        accessToken,
-        userId,
-        createdPlaylistId,
-        uris
-      ).then(data => {
-        console.log(data);
-      });
+  forkPlaylist(accessToken, userId, playlistId, ownUserId)
+    .then(data => {
+      console.log(data);
+    })
+    .catch(e => {
+      console.log(e);
     });
-  });
 });
 
 app.get("*", (req, res) => {
