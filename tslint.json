@@ -4,7 +4,8 @@
   "jsRules": {},
   "rules": {
     "no-var-requires": false,
-    "interface-name": [true, "never-prefix"]
+    "interface-name": [true, "never-prefix"],
+    "ordered-imports": false
   },
   "rulesDirectory": []
 }
