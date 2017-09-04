@@ -6,7 +6,10 @@ import { Provider } from "react-redux";
 import { BrowserRouter as Router } from "react-router-dom";
 import "normalize.css";
 
-const store = configureStore();
+const preloadedState = (window as any).__PRELOADED_STATE__;
+delete (window as any).__PRELOADED_STATE__;
+
+const store = configureStore(preloadedState);
 
 render(
   <Provider store={store}>

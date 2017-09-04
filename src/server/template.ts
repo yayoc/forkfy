@@ -1,9 +1,10 @@
 interface ITemplate {
   markup: string;
   title: string;
+  preloadedState: {} | null;
 }
 
-export default ({markup, title}: ITemplate) => {
+export default ({ markup, title, preloadedState }: ITemplate) => {
   return `
     <!doctype html>
     <html>
@@ -24,6 +25,12 @@ export default ({markup, title}: ITemplate) => {
       <div id="app">
       ${markup}
       </div>
+      <script>
+      window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(
+        /</g,
+        "\\u003c"
+      )}
+      </script>
       <script src="/static/client.js" />
       <script>
         (function () {

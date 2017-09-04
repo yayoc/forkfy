@@ -6,6 +6,7 @@ import { renderToString } from "react-dom/server";
 import { matchPath, StaticRouter as Router } from "react-router";
 import { Provider } from "react-redux";
 import * as bodyParser from "body-parser";
+import * as cookieParser from "cookie-parser";
 import template from "server/template";
 import NotFound from "client/components/NotFound";
 import Routes from "client/routes";
@@ -34,6 +35,7 @@ app.set("views", path.dirname);
 app.use("/static", express.static("./dist"));
 app.use(morgan("combined"));
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 const requireAuthentication = (req: any, res: any, next: () => void) => {
   const authorizationHeader = req.get("Authorization");
@@ -120,16 +122,39 @@ app.get("*", (req, res) => {
     const m = renderToString(<NotFound />);
     res.status(404).send(m);
   }
-  const context = {};
-  const store = configureStore();
-  const markup = renderToString(
-    <Provider store={store}>
-      <Router location={req.url} context={context}>
-        <Routes />
-      </Router>
-    </Provider>
-  );
-  res.send(template({ markup, title: "" }));
+
+  const { token } = req.cookies;
+  if (!token) {
+    const context = {};
+    const store = configureStore({});
+    const markup = renderToString(
+      <Provider store={store}>
+        <Router location={req.url} context={context}>
+          <Routes />
+        </Router>
+      </Provider>
+    );
+    res.send(template({ markup, title: "", preloadedState: null }));
+  }
+
+  getMe(token).then(data => {
+    const authState = {
+      accessToken: token,
+      isAuthorized: true,
+      isLoading: false,
+      me: data
+    };
+    const store = configureStore({ auth: authState });
+    const context = {};
+    const markup = renderToString(
+      <Provider store={store}>
+        <Router location={req.url} context={context}>
+          <Routes />
+        </Router>
+      </Provider>
+    );
+    res.send(template({ markup, title: "", preloadedState: store.getState() }));
+  });
 });
 /* tslint:disable:no-console */
 app.listen(3000, () => console.log("listening on port 3000"));
