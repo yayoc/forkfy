@@ -41,12 +41,14 @@ export const actions = {
 
 export interface State {
   accessToken: string | null;
+  isAuthorized: boolean;
   me: Me | null;
   isLoading: boolean;
 }
 
 const initialState: State = {
   accessToken: null,
+  isAuthorized: false,
   isLoading: false,
   me: null
 };
@@ -60,9 +62,9 @@ export default (state: State = initialState, action: Actions): State => {
       return { ...state, isLoading: true };
     case Types.FETCH_ME_SUCCESS:
       const me = action.payload;
-      return { ...state, me, isLoading: false };
+      return { ...state, me, isLoading: false, isAuthorized: true };
     case Types.FETCH_ME_FAILED:
-      return { ...state, isLoading: false };
+      return { ...state, isLoading: false, isAuthorized: false };
     default:
       return state;
   }
@@ -71,4 +73,3 @@ export default (state: State = initialState, action: Actions): State => {
 // - Selector
 
 export const getAuth = (state: ReduxState) => state.auth;
-

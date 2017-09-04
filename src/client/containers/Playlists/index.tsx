@@ -5,6 +5,7 @@ import { match } from "react-router";
 import { ReduxState } from "client/helpers/types";
 import { Item } from "client/types";
 import { actions } from "client/modules/playlist";
+import authorization from "client/containers/Auth";
 
 interface StateProps {
   playlist: Item;
@@ -25,7 +26,6 @@ interface DispatchProps {
 class Playlists extends React.Component<OwnProps & StateProps & DispatchProps> {
   public fork = () => {
     const { fork, playlist } = this.props;
-    debugger;
     fork(playlist.owner.id);
   };
 
@@ -44,7 +44,8 @@ class Playlists extends React.Component<OwnProps & StateProps & DispatchProps> {
     );
   }
 }
-const mapStateToProps = (state: ReduxState, ownProps: OwnProps) => {
+
+const mapStateToProps = (state: ReduxState, ownProps: OwnProps): StateProps => {
   return {
     playlist:
       state.entity && state.entity.entities
@@ -66,4 +67,7 @@ const mapDispatchToProps = (
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Playlists);
+export default connect<StateProps, DispatchProps, OwnProps>(
+  mapStateToProps,
+  mapDispatchToProps
+)(authorization(Playlists));

@@ -12,6 +12,7 @@ function* fetchMeSaga(
     const auth = yield select(getAuth);
     const res = yield call(getMe, auth.accessToken);
     yield put(actions.fetchMeSuccess(res));
+    localStorage.setItem("token", auth.accessToken);
   } catch (e) {
     yield put(actions.fetchMeFailed(e));
   }
