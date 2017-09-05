@@ -8,7 +8,7 @@ $color: #2e2f33;
   padding: 10px 0;
   text-align: center;
 
-  a {
+  .logo {
     color: $color;
     font-size: 16px;
     font-weight: 700;
@@ -19,4 +19,35 @@ $color: #2e2f33;
 
 .avatar {
   border-radius: 50%;
+  cursor: pointer;
+}
+
+.menu {
+  position: absolute;
+  right: 0;
+  top: 54px;
+  background: #fff;
+  border: 1px solid #ddd;
+  ul {
+    list-style: none;
+    padding: 10px;
+    margin: 0;
+    li {
+      cursor: pointer;
+      font-size: 14px;
+      color: $color;
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      &:last-child {
+        border-bottom: none;
+      }
+      :hover {
+        color: #ddd;
+      }
+      a {
+        color: $color;
+        text-decoration: none;
+      }
+    }
+  }
 }
