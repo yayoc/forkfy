@@ -1,0 +1,46 @@
+@import "../../assets/styles/main.scss";
+
+.closeButton {
+  line-height: 1.5;
+  padding: 10px;
+  display: block;
+  text-decoration: none;
+  font-size: 20px;
+  color: #333;
+}
+
+.ownerId {
+  margin-left: 5px;
+  color: #333;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.linkSpotify {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 500px;
+  color: #333;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+  padding: 11px 35px;
+  touch-action: manipulation;
+  margin-right: 5px;
+  text-decoration: none;
+}
+
+.forkButton {
+  background-color: $background-color;
+  border: 1px solid transparent;
+  border-radius: 500px;
+  color: $color;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+  padding: 7px 35px;
+  touch-action: manipulation;
+}

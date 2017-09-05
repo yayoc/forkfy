@@ -5,7 +5,11 @@ import { match } from "react-router";
 import { ReduxState } from "client/helpers/types";
 import { Item } from "client/types";
 import { actions } from "client/modules/playlist";
+import { Link } from "react-router-dom";
 import authorization from "client/containers/Auth";
+
+const s = require("./Playlist.scss");
+const grid = require("client/assets/styles/flexboxgrid.min.css");
 
 interface StateProps {
   playlist: Item;
@@ -33,13 +37,38 @@ class Playlists extends React.Component<OwnProps & StateProps & DispatchProps> {
     const { playlist } = this.props;
     return (
       <div>
-        {playlist && (
-          <div>
-            <img src={playlist.images[0].url} width={300} height={300} />
-            <p>{playlist.name}</p>
-            <button onClick={this.fork}>Fork this playlist</button>
+        <div className={`${grid.row} ${grid["center-xs"]}`}>
+          <div className={`${grid["col-xs-offset-9"]} ${grid["col-xs-3"]}`}>
+            <Link to="/" className={s.closeButton}>
+              x
+            </Link>
           </div>
-        )}
+          {playlist && (
+            <div>
+              <img src={playlist.images[0].url} width={300} height={300} />
+              <h1>{playlist.name}</h1>
+              <p>
+                by
+                <a
+                  className={s.ownerId}
+                  href={playlist.owner.external_urls.spotify}
+                >
+                  {playlist.owner.id}
+                </a>
+              </p>
+              <p>collaborative: {playlist.collaborative.toString()}</p>
+              <a
+                className={s.linkSpotify}
+                href={playlist.external_urls.spotify}
+              >
+                Listen on Spotify
+              </a>
+              <button className={s.forkButton} onClick={this.fork}>
+                Fork this playlist
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     );
   }
