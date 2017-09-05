@@ -11,6 +11,8 @@ import template from "server/template";
 import NotFound from "client/components/NotFound";
 import Routes from "client/routes";
 import configureStore from "client/store";
+import { normalize, schema } from "normalizr";
+
 import {
   getMe,
   searchPlaylists,
@@ -22,7 +24,7 @@ import {
 
 const routes = [
   "/",
-  "/playlists/:playlistId",
+  "/users/:userId/playlists/:playlistId",
   "/friends",
   "/categories/:categoryId/playlists",
   "/about"
@@ -144,16 +146,46 @@ app.get("*", (req, res) => {
       isLoading: false,
       me: data
     };
-    const store = configureStore({ auth: authState });
-    const context = {};
-    const markup = renderToString(
-      <Provider store={store}>
-        <Router location={req.url} context={context}>
-          <Routes />
-        </Router>
-      </Provider>
-    );
-    res.send(template({ markup, title: "", preloadedState: store.getState() }));
+    if (!req.originalUrl.match("/playlists/")) {
+      const store = configureStore({ auth: authState });
+      const context = {};
+      const markup = renderToString(
+        <Provider store={store}>
+          <Router location={req.url} context={context}>
+            <Routes />
+          </Router>
+        </Provider>
+      );
+      res.send(
+        template({ markup, title: "", preloadedState: store.getState() })
+      );
+    } else {
+      if (!match) {
+        return;
+      }
+      const { userId, playlistId } = match.params as any;
+      if (!userId || !playlistId) {
+        return;
+      }
+      getPlaylist(token, userId, playlistId).then(playlist => {
+        const normalizedData = normalize(playlist, new schema.Entity("items"));
+        const entityState = {
+          entities: normalizedData.entities
+        };
+        const store = configureStore({ auth: authState, entity: entityState });
+        const context = {};
+        const markup = renderToString(
+          <Provider store={store}>
+            <Router location={req.url} context={context}>
+              <Routes />
+            </Router>
+          </Provider>
+        );
+        res.send(
+          template({ markup, title: "", preloadedState: store.getState() })
+        );
+      });
+    }
   });
 });
 /* tslint:disable:no-console */

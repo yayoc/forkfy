@@ -7,14 +7,15 @@ export default function configureStore(initialState: {}): Store<{}> {
   const sagaMiddleware = createSagaMiddleware();
   let store;
   if (typeof window !== "undefined") {
-    store = createStore(
-      rootReducer,
-      initialState,
-      //   (window as any).__REDUX_DEVTOOLS_EXTENSION__ &&
-      //     (window as any).__REDUX_DEVTOOLS_EXTENSION__()
-      // ],
-      applyMiddleware(sagaMiddleware)
-    );
+    if (initialState) {
+      store = createStore(
+        rootReducer,
+        initialState,
+        applyMiddleware(sagaMiddleware)
+      );
+    } else {
+      store = createStore(rootReducer, applyMiddleware(sagaMiddleware));
+    }
     sagaMiddleware.run(rootSaga);
   } else {
     store = createStore(rootReducer, initialState);

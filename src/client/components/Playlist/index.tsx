@@ -7,10 +7,10 @@ interface OwnPros {
 }
 
 export default class Playlist extends React.Component<OwnPros> {
-  render() {
+  public render() {
     const { playlist } = this.props;
     return (
-      <Link to={`/playlists/${playlist.id}`}>
+      <Link to={`/users/${playlist.owner.id}/playlists/${playlist.id}`}>
         <img src={playlist.images[0].url} width={300} height={300} />
       </Link>
     );

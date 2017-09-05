@@ -15,7 +15,7 @@ export default () =>
     <div className={s.content}>
       <Switch>
         <Route component={Top} path="/" exact />
-        <Route component={Playlists} path="/playlists/:playlistId" />
+        <Route component={Playlists} path="/users/:userId/playlists/:playlistId" />
         <Route component={About} path="/about" />
       </Switch>
     </div>

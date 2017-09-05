@@ -114,7 +114,7 @@ export function addTracksToPlaylist(
   accessToken: string,
   userId: string,
   playlistId: string,
-  uris: Array<string>,
+  uris: string[],
   position: number = 0
 ): Promise<any> {
   const body = {

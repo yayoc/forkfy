@@ -10,7 +10,7 @@ import { normalize, schema } from "normalizr";
 import { getQueryParams } from "client/helpers/api";
 
 const item = new schema.Entity("items");
-const responseSchema = { items: new schema.Array(item) };
+export const responseSchema = { items: new schema.Array(item) };
 
 function* searchSaga(
   action: ActionWithPayload<Types.SEARCH_REQUEST, string>
