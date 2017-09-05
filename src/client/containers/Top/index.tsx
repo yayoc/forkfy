@@ -58,19 +58,18 @@ class Top extends React.Component<OwnProps & StateProps & DispatchProps> {
     const { playlists, search, result } = this.props;
     return (
       <div className={s.content}>
-        <h1>Search</h1>
+        <h1>Discover playlists</h1>
         <div>
-          <div className={`${grid.row} ${grid["center-xs"]}`}>
+          <div className={`${grid.row}`}>
+            <div className={grid["col-xs-1"]} />
             <input
-              className={`${s.input} ${grid["col-xs-8"]}`}
+              className={`${s.input} ${grid["col-xs-7"]}`}
               onChange={this.onChage}
               value={this.state.q}
               placeholder="Artist name, keyword.. "
             />
-          </div>
-          <div className={`${grid.row} ${grid["center-xs"]}`}>
             <button
-              className={`${s.button} ${grid["col-xs-4"]}`}
+              className={`${s.button} ${grid["col-xs-3"]}`}
               onClick={this.onClick}
             >
               Search

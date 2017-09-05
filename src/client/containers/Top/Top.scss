@@ -1,4 +1,4 @@
-@import '../../assets/styles/main.scss';
+@import "../../assets/styles/main.scss";
 
 .content {
   text-align: center;
@@ -7,8 +7,8 @@
 .input {
   border: 1px solid $border-color;
   border-radius: 5px;
-  height: 30px;
-  margin-right: 5px;
+  height: 37px;
+  // margin-right: 5px;
   padding: 5px;
 }
 
@@ -21,8 +21,8 @@
   font-size: 14px;
   font-weight: 700;
   line-height: 1.5;
-  padding: 7px 35px;
   touch-action: manipulation;
+  margin-left: 5px;
 }
 
 .playlist {
