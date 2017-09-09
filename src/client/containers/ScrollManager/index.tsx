@@ -1,6 +1,6 @@
 import * as React from "react";
 import { withRouter } from "react-router-dom";
-import debounce from "debounce";
+import debounce = require("debounce");
 
 interface DefaultProps {
   scrollCaptureDebounce: number;
@@ -10,12 +10,12 @@ interface DefaultProps {
 
 interface Props {
   onLocationChange: void;
-  location: Location;
-  children: React.ReactDOM;
+  location: any;
+  children: any;
   history: History;
 }
 
-class ScrollManager extends React.Component<DefaultProps & Props, {}> {
+class ScrollManager extends React.Component<DefaultProps & Props> {
   public static defaultProps = {
     scrollCaptureDebounce: 50,
     scrollSyncDebounce: 100,
@@ -28,8 +28,8 @@ class ScrollManager extends React.Component<DefaultProps & Props, {}> {
     attemptsRemaining: number;
   };
 
-  public debouncedScroll: EventListenerObject;
-  public debouncedScrollSync: (x: number, y: number) => void;
+  public debouncedScroll: any;
+  public debouncedScrollSync: any;
   public scrollSyncPending: boolean;
 
   constructor(props: DefaultProps & Props) {
@@ -44,7 +44,6 @@ class ScrollManager extends React.Component<DefaultProps & Props, {}> {
     const scrollCapture = () => {
       requestAnimationFrame(() => {
         const { pageXOffset: x, pageYOffset: y } = window;
-
         // use browser history instead of router history
         // to avoid infinite history.replace loop
         const { pathname } = this.props.location;
@@ -108,21 +107,23 @@ class ScrollManager extends React.Component<DefaultProps & Props, {}> {
 
   public componentDidMount() {
     this.onPop(this.props);
-    window.addEventListener("scroll", this.debouncedScroll, { passive: true });
+    window.addEventListener("scroll", this.debouncedScroll, {
+      passive: true
+    } as any);
   }
 
   public componentWillUnmount() {
     this.scrollSyncPending = false;
     window.removeEventListener("scroll", this.debouncedScroll, {
       passive: true
-    });
+    } as any);
   }
 
-  public componentWillReceiveProps(nextProps: DefaultProps & Props) {
-    switch (nextProps.history.action) {
+  public componentWillReceiveProps(nextProps: any) {
+    switch ((nextProps.history as any).action) {
       case "PUSH":
       case "REPLACE":
-        this.onPush();
+        this.onPush(nextProps);
         break;
       case "POP":
         this.onPop(nextProps);
@@ -135,7 +136,7 @@ class ScrollManager extends React.Component<DefaultProps & Props, {}> {
     }
   }
 
-  public onPush() {
+  public onPush({ location: { state = {} } }) {
     this.debouncedScrollSync(0, 0);
   }
 
@@ -150,4 +151,4 @@ class ScrollManager extends React.Component<DefaultProps & Props, {}> {
   }
 }
 
-export default withRouter(ScrollManager);
+export default withRouter(ScrollManager as any);

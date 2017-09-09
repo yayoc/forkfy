@@ -38,11 +38,6 @@ class Playlists extends React.Component<OwnProps & StateProps & DispatchProps> {
     return (
       <div>
         <div className={`${grid.row} ${grid["center-xs"]}`}>
-          <div className={`${grid["col-xs-offset-9"]} ${grid["col-xs-3"]}`}>
-            <Link to="/" className={s.closeButton}>
-              x
-            </Link>
-          </div>
           {playlist && (
             <div>
               <img src={playlist.images[0].url} width={300} height={300} />
