@@ -12,12 +12,20 @@ interface StateProps {
   authState: AuthState;
 }
 
-class Header extends React.Component<StateProps> {
+interface DispatchProps {
+  logout: () => void;
+}
+
+class Header extends React.Component<StateProps & DispatchProps> {
   public state = {
     isOpen: false
   };
 
-  public signoutClicked = () => {};
+  public signoutClicked = (e: React.SyntheticEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const { logout } = this.props;
+    logout();
+  };
 
   public menuClicked = () => {
     this.setState({ isOpen: !this.state.isOpen });
@@ -80,4 +88,15 @@ const mapStateToProps = (state: ReduxState): StateProps => {
   };
 };
 
-export default connect<StateProps, undefined, {}>(mapStateToProps)(Header);
+const mapDispatchToProps = (dispatch: Dispatch<string>) => {
+  return {
+    logout: () => {
+      dispatch(actions.logout());
+    }
+  };
+};
+
+export default connect<StateProps, DispatchProps, {}>(
+  mapStateToProps,
+  mapDispatchToProps
+)(Header);

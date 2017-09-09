@@ -1,12 +1,10 @@
 import { getMe } from "client/helpers/api";
 import { ActionWithPayload } from "client/helpers/types";
-import { actions, Types, getAuth } from "client/modules/auth";
+import { actions, Types, getAuth, COOKIE_PATH } from "client/modules/auth";
 import { takeEvery } from "redux-saga";
 import { call, Effect, put, select } from "redux-saga/effects";
 import { SagaIterator } from "./index";
 import * as Cookies from "js-cookie";
-
-const COOKIE_PATH = "token";
 
 function* fetchMeSaga(
   action: ActionWithPayload<Types.SET_ACCESS_TOKEN, string>
@@ -21,6 +19,15 @@ function* fetchMeSaga(
   }
 }
 
-export default function* authSaga(): SagaIterator {
+export function* watchFetchMeSaga(): SagaIterator {
   yield* takeEvery(Types.SET_ACCESS_TOKEN, fetchMeSaga);
+}
+
+function* logoutSaga(): Iterable<Effect> {
+  Cookies.remove(COOKIE_PATH);
+}
+
+
+export function* watchLogoutSaga(): SagaIterator {
+  yield* takeEvery(Types.LOGOUT, logoutSaga);
 }

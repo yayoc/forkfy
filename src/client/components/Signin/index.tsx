@@ -24,6 +24,7 @@ class Signin extends React.Component<
         const h = hash.slice(1);
         const parsed = parser(h);
         this.props.setAccessToken(parsed.access_token);
+        window.history.replaceState({}, "", "/");
       }
     }
   }
