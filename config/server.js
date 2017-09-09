@@ -22,10 +22,12 @@ module.exports = {
   module: {
     rules: [
       CommonConfig.BabelLoaderRule,
-      CommonConfig.IsomorphicStyleLoaderRule,
+      CommonConfig.CSSLoaderRule,
+
       { test: /\.tsx?$/, loader: "awesome-typescript-loader" }
     ]
   },
+  plugins: [CommonConfig.LocalStyles],
   externals: nodeExternals(),
   devtool: "source-map",
   stats: CommonConfig.stats

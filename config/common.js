@@ -64,20 +64,6 @@ const CSSLoaderRule = {
   use: CSSLoader
 };
 
-const IsomorphicStyleLoaderRule = {
-  test: /\.(scss|css)$/,
-  use: [
-    "isomorphic-style-loader",
-    {
-      loader: "css-loader",
-      options: {
-        importLoaders: 1
-      }
-    },
-    "postcss-loader"
-  ]
-};
-
 const BabelLoaderRule = {
   test: /\.(js|jsx)$/,
   exclude: /node_modules/,
@@ -110,7 +96,6 @@ module.exports = {
   HtmlPlugin,
   ScriptExtHtmlPlugin,
   LocalStyles,
-  IsomorphicStyleLoaderRule,
   CSSLoaderRule,
   BabelLoaderRule,
   stats
