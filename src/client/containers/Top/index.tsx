@@ -20,7 +20,7 @@ const s = require("./Top.scss");
 const grid = require("client/assets/styles/flexboxgrid.min.css");
 
 interface StateProps {
-  playlists: Array<Item>;
+  playlists: Item[];
   isLoading: boolean;
   result: Result | null;
 }
@@ -40,6 +40,12 @@ class Top extends React.Component<OwnProps & StateProps & DispatchProps> {
   };
   public onChage = (e: React.FormEvent<HTMLInputElement>) => {
     this.setState({ q: e.currentTarget.value });
+  };
+
+  public onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.keyCode === 13) {
+      this.props.search(this.state.q);
+    }
   };
 
   public onClick = () => {
@@ -67,6 +73,7 @@ class Top extends React.Component<OwnProps & StateProps & DispatchProps> {
               onChange={this.onChage}
               value={this.state.q}
               placeholder="Artist name, keyword.. "
+              onKeyDown={this.onKeyDown}
             />
             <button
               className={`${s.button} ${grid["col-xs-3"]}`}
