@@ -10,10 +10,12 @@ $color: #2e2f33;
 
   .logo {
     color: $color;
-    font-size: 16px;
+    font-size: 24px;
     font-weight: 700;
-    line-height: 24px;
+    line-height: 1;
     text-decoration: none;
+    display: inline-block;
+    padding: 5px 0 4px;
   }
 }
 
