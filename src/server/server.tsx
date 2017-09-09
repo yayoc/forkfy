@@ -139,14 +139,68 @@ app.get("*", (req, res) => {
     res.send(template({ markup, title: "", preloadedState: null }));
   }
 
-  getMe(token).then(data => {
-    const authState = {
-      accessToken: token,
-      isAuthorized: true,
-      isLoading: false,
-      me: data
-    };
-    if (!req.originalUrl.match("/playlists/")) {
+  getMe(token)
+    .then(data => {
+      const authState = {
+        accessToken: token,
+        isAuthorized: true,
+        isLoading: false,
+        me: data
+      };
+      if (!req.originalUrl.match("/playlists/")) {
+        const store = configureStore({ auth: authState });
+        const context = {};
+        const markup = renderToString(
+          <Provider store={store}>
+            <Router location={req.url} context={context}>
+              <Routes />
+            </Router>
+          </Provider>
+        );
+        res.send(
+          template({ markup, title: "", preloadedState: store.getState() })
+        );
+      } else {
+        if (!match) {
+          return;
+        }
+        const { userId, playlistId } = match.params as any;
+        if (!userId || !playlistId) {
+          return;
+        }
+        getPlaylist(token, userId, playlistId).then(playlist => {
+          const normalizedData = normalize(
+            playlist,
+            new schema.Entity("items")
+          );
+          const entityState = {
+            entities: normalizedData.entities
+          };
+          const store = configureStore({
+            auth: authState,
+            entity: entityState
+          });
+          const context = {};
+          const markup = renderToString(
+            <Provider store={store}>
+              <Router location={req.url} context={context}>
+                <Routes />
+              </Router>
+            </Provider>
+          );
+          res.send(
+            template({ markup, title: "", preloadedState: store.getState() })
+          );
+        });
+      }
+    })
+    .catch(e => {
+      const authState = {
+        accessToken: null,
+        isAuthorized: false,
+        isLoading: false,
+        me: null
+      };
       const store = configureStore({ auth: authState });
       const context = {};
       const markup = renderToString(
@@ -159,34 +213,7 @@ app.get("*", (req, res) => {
       res.send(
         template({ markup, title: "", preloadedState: store.getState() })
       );
-    } else {
-      if (!match) {
-        return;
-      }
-      const { userId, playlistId } = match.params as any;
-      if (!userId || !playlistId) {
-        return;
-      }
-      getPlaylist(token, userId, playlistId).then(playlist => {
-        const normalizedData = normalize(playlist, new schema.Entity("items"));
-        const entityState = {
-          entities: normalizedData.entities
-        };
-        const store = configureStore({ auth: authState, entity: entityState });
-        const context = {};
-        const markup = renderToString(
-          <Provider store={store}>
-            <Router location={req.url} context={context}>
-              <Routes />
-            </Router>
-          </Provider>
-        );
-        res.send(
-          template({ markup, title: "", preloadedState: store.getState() })
-        );
-      });
-    }
-  });
+    });
 });
 /* tslint:disable:no-console */
 app.listen(3000, () => console.log("listening on port 3000"));

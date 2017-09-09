@@ -15,6 +15,7 @@ import { Playlists, Item } from "client/types";
 import { ReduxState } from "client/helpers/types";
 import Playlist from "client/components/Playlist";
 import authorization from "client/containers/Auth";
+import Loader from "client/components/Loader";
 
 const s = require("./Top.scss");
 const grid = require("client/assets/styles/flexboxgrid.min.css");
@@ -61,7 +62,7 @@ class Top extends React.Component<OwnProps & StateProps & DispatchProps> {
   };
 
   public render() {
-    const { playlists, search, result } = this.props;
+    const { playlists, search, result, isLoading } = this.props;
     return (
       <div className={s.content}>
         <h1>Discover playlists</h1>
@@ -82,6 +83,7 @@ class Top extends React.Component<OwnProps & StateProps & DispatchProps> {
               Search
             </button>
           </div>
+          {isLoading && <Loader />}
           {playlists.length > 0 && (
             <div>
               {result && (

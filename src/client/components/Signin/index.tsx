@@ -2,7 +2,12 @@ import { actions } from "client/modules/auth";
 import * as React from "react";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
-import { accessTokenKey, callbackUrl, clientId } from "../../constants";
+import {
+  accessTokenKey,
+  callbackUrl,
+  clientId,
+  authUrl
+} from "../../constants";
 
 class Signin extends React.Component<
   { location: { [key: string]: any }; setAccessToken: (token: string) => void },
@@ -29,9 +34,6 @@ class Signin extends React.Component<
     }
   }
   public render() {
-    const scopes =
-      "playlist-read-private playlist-read-collaborative playlist-modify-public playlist-modify-private";
-    const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&redirect_uri=${callbackUrl}&scope=${scopes}`;
     return (
       <div>
         <a href={authUrl}>Signin</a>

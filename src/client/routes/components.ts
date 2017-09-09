@@ -6,20 +6,8 @@ const Top = asyncComponent(() =>
   )
 );
 
-const Categories = asyncComponent(() =>
-  import("client/containers/Categories" /* webpackChunkName: "categories" */).then(
-    module => module.default
-  )
-);
-
 const Playlists = asyncComponent(() =>
   import("client/containers/Playlists" /* webpackChunkName: "playlists" */).then(
-    module => module.default
-  )
-);
-
-const Friends = asyncComponent(() =>
-  import("client/containers/Friends" /* webpackChunkName: "friends" */).then(
     module => module.default
   )
 );
@@ -32,8 +20,6 @@ const About = asyncComponent(() =>
 
 export default {
   About,
-  Categories,
-  Friends,
   Playlists,
   Top
 };

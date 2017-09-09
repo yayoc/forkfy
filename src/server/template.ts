@@ -1,10 +1,10 @@
-interface ITemplate {
+interface Template {
   markup: string;
   title: string;
   preloadedState: {} | null;
 }
 
-export default ({ markup, title, preloadedState }: ITemplate) => {
+export default ({ markup, title, preloadedState }: Template) => {
   return `
     <!doctype html>
     <html>
