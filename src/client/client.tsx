@@ -1,5 +1,5 @@
-import Routes from "client/routes";
-import configureStore from "client/store";
+import Routes from "shared/routes";
+import configureStore from "shared/store";
 import * as React from "react";
 import { render } from "react-dom";
 import { Provider } from "react-redux";

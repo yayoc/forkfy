@@ -8,9 +8,9 @@ import { Provider } from "react-redux";
 import * as bodyParser from "body-parser";
 import * as cookieParser from "cookie-parser";
 import template from "server/template";
-import NotFound from "client/components/NotFound";
-import Routes, { routes } from "client/routes";
-import configureStore from "client/store";
+import NotFound from "shared/components/NotFound";
+import Routes, { routes } from "shared/routes";
+import configureStore from "shared/store";
 import { normalize, schema } from "normalizr";
 
 import {
