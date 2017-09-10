@@ -2,7 +2,7 @@ import fetch from "node-fetch";
 
 const API_ROOT = "http://localhost:3000/api";
 
-const queryParams = (params: { [key: string]: any }) => {
+export const queryParams = (params: { [key: string]: any }) => {
   return Object.keys(params)
     .map(k => encodeURIComponent(k) + "=" + encodeURIComponent(params[k]))
     .join("&");
@@ -23,10 +23,24 @@ export function getQueryParams(url: string): { [key: string]: any } {
     }, {});
 }
 
-interface FetchRequest {
+export function statusCheck(response: Response) {
+  if (response.status >= 200 && response.status < 300) {
+    return response;
+  }
+  const error = new Error(response.statusText);
+  throw error;
+}
+
+export interface FetchRequest {
   endpoint: string;
   accessToken: string;
   params?: object;
+}
+
+export interface PostRequest {
+  endpoint: string;
+  accessToken: string;
+  body?: object;
 }
 
 export function fetchFromAPI({ endpoint, accessToken, params }: FetchRequest) {
@@ -45,11 +59,6 @@ export function fetchFromAPI({ endpoint, accessToken, params }: FetchRequest) {
   }).then(response => response.json());
 }
 
-interface PostRequest {
-  endpoint: string;
-  accessToken: string;
-  body?: object;
-}
 
 export function postToAPI({ endpoint, accessToken, body }: PostRequest) {
   const url = [API_ROOT, endpoint].join("/");

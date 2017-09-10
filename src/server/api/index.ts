@@ -1,26 +1,12 @@
 import fetch from "node-fetch";
+import {
+  queryParams,
+  statusCheck,
+  FetchRequest,
+  PostRequest
+} from "shared/helpers/api";
 
 const SPOTIFY_API_ROOT = "https://api.spotify.com/v1";
-
-const queryParams = (params: { [key: string]: any }) => {
-  return Object.keys(params)
-    .map(k => encodeURIComponent(k) + "=" + encodeURIComponent(params[k]))
-    .join("&");
-};
-
-interface FetchRequest {
-  endpoint: string;
-  accessToken: string;
-  params?: object;
-}
-
-function statusCheck(response: Response) {
-  if (response.status >= 200 && response.status < 300) {
-    return response;
-  }
-  const error = new Error(response.statusText);
-  throw error;
-}
 
 export function fetchFromAPI({ endpoint, accessToken, params }: FetchRequest) {
   let url = [SPOTIFY_API_ROOT, endpoint].join("/");
@@ -38,12 +24,6 @@ export function fetchFromAPI({ endpoint, accessToken, params }: FetchRequest) {
   })
     .then(response => statusCheck(response as any))
     .then(response => response.json());
-}
-
-interface PostRequest {
-  endpoint: string;
-  accessToken: string;
-  body?: object;
 }
 
 export function postToAPI({ endpoint, accessToken, body }: PostRequest) {
