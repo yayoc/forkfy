@@ -1,3 +1,5 @@
+import fetch from "node-fetch";
+
 const API_ROOT = "http://localhost:3000/api";
 
 const queryParams = (params: { [key: string]: any }) => {
@@ -38,7 +40,6 @@ export function fetchFromAPI({ endpoint, accessToken, params }: FetchRequest) {
     Authorization: `Bearer ${accessToken}`
   };
   return fetch(url, {
-    credentials: "include",
     headers,
     method: "GET"
   }).then(response => response.json());
