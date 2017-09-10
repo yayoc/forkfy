@@ -2,12 +2,7 @@ import { actions } from "client/modules/auth";
 import * as React from "react";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
-import {
-  accessTokenKey,
-  callbackUrl,
-  clientId,
-  authUrl
-} from "../../constants";
+import { callbackUrl, clientId, authUrl } from "../../constants";
 
 class Signin extends React.Component<
   { location: { [key: string]: any }; setAccessToken: (token: string) => void },
