@@ -9,7 +9,7 @@ import * as bodyParser from "body-parser";
 import * as cookieParser from "cookie-parser";
 import template from "server/template";
 import NotFound from "client/components/NotFound";
-import Routes from "client/routes";
+import Routes, { routes } from "client/routes";
 import configureStore from "client/store";
 import { normalize, schema } from "normalizr";
 
@@ -21,14 +21,6 @@ import {
   getPlaylistTracks,
   getPlaylist
 } from "server/api";
-
-const routes = [
-  "/",
-  "/users/:userId/playlists/:playlistId",
-  "/friends",
-  "/categories/:categoryId/playlists",
-  "/about"
-];
 
 const app = express();
 
@@ -117,7 +109,7 @@ app.post("/api/users/:userId/playlists", (req, res, next) => {
 
 app.get("*", (req, res) => {
   const match = routes.reduce(
-    (acc, route) => matchPath(req.url, { path: route, exact: true }) || acc,
+    (acc, route) => matchPath(req.url, route) || acc,
     null
   );
   if (!match) {

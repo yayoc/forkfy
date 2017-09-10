@@ -8,7 +8,7 @@ import ScrollManager from "client/containers/ScrollManager";
 
 const s = require("./Routes.scss");
 
-const routes = [
+export const routes = [
   {
     path: "/",
     component: Top,
