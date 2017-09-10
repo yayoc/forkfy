@@ -8,19 +8,28 @@ import ScrollManager from "client/containers/ScrollManager";
 
 const s = require("./Routes.scss");
 
+const routes = [
+  {
+    path: "/",
+    component: Top,
+    exact: true
+  },
+  {
+    path: "/users/:userId/playlists/:playlistId",
+    component: Playlists
+  },
+  {
+    path: "/about",
+    component: About
+  }
+];
+
 export default () => (
   <div>
     <Header />
     <ScrollManager>
       <div className={s.content}>
-        <Switch>
-          <Route component={Top} path="/" exact />
-          <Route
-            component={Playlists}
-            path="/users/:userId/playlists/:playlistId"
-          />
-          <Route component={About} path="/about" />
-        </Switch>
+        <Switch>{routes.map(route => <Route {...route} />)}</Switch>
       </div>
     </ScrollManager>
   </div>
