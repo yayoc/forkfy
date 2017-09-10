@@ -53,26 +53,31 @@ interface AuthorizedReq {
   token: string;
 }
 
-app.get("/api/me", (req, res, next) => {
-  getMe((req as any).token).then(data => {
-    res.send(data);
-  });
+app.get("/api/me", async (req, res, next) => {
+  try {
+    const me = await getMe((req as any).token);
+    res.send(me);
+  } catch (e) {
+    res.status(500).render("error", { e });
+  }
 });
 
-app.get("/api/search", (req, res, next) => {
-  const q = req.param("q");
-  const offset = req.param("offset");
-  searchPlaylists((req as any).token, q, offset).then(data => {
-    res.send(data);
-  });
+app.get("/api/search", async (req, res, next) => {
+  try {
+    const q = req.param("q");
+    const offset = req.param("offset");
+    const playlists = await searchPlaylists((req as any).token, q, offset);
+    res.send(playlists);
+  } catch (e) {
+    res.status(500).render("error", { e });
+  }
 });
 
-async function forkPlaylist(
-  accessToken: string,
-  userId: string,
-  playlistId: string,
-  ownUserId: string
-) {
+app.post("/api/users/:userId/playlists", async (req, res, next) => {
+  const accessToken = (req as any).token;
+  const userId = req.param("userId");
+  const ownUserId = req.body.ownUserId;
+  const playlistId = req.body.playlistId;
   try {
     const playlist = await getPlaylist(accessToken, ownUserId, playlistId);
     // 1. Create own playlist
@@ -87,27 +92,19 @@ async function forkPlaylist(
     // 2. Get tracks of the playlist.
     const uris = playlist.tracks.items.map((i: any) => i.track.uri);
     // 3. Add tracks into own playlist.
-    return addTracksToPlaylist(accessToken, userId, myPlaylist.id, uris);
+    const response = await addTracksToPlaylist(
+      accessToken,
+      userId,
+      myPlaylist.id,
+      uris
+    );
+    res.status(200).send(response);
   } catch (e) {
-    return Promise.reject(e);
+    res.status(500).render("error", { e });
   }
-}
-
-app.post("/api/users/:userId/playlists", (req, res, next) => {
-  const accessToken = (req as any).token;
-  const userId = req.param("userId");
-  const ownUserId = req.body.ownUserId;
-  const playlistId = req.body.playlistId;
-  forkPlaylist(accessToken, userId, playlistId, ownUserId)
-    .then(data => {
-      console.log(data);
-    })
-    .catch(e => {
-      console.log(e);
-    });
 });
 
-app.get("*", (req, res) => {
+app.get("*", async (req, res) => {
   const match = routes.reduce(
     (acc, route) => matchPath(req.url, route) || acc,
     null
@@ -118,86 +115,33 @@ app.get("*", (req, res) => {
   }
 
   const { token } = req.cookies;
+
+  const signinMarkup = renderToString(
+    <Provider store={configureStore({})}>
+      <Router location={req.url} context={{}}>
+        <Routes />
+      </Router>
+    </Provider>
+  );
   if (!token) {
-    const context = {};
-    const store = configureStore({});
-    const markup = renderToString(
-      <Provider store={store}>
-        <Router location={req.url} context={context}>
-          <Routes />
-        </Router>
-      </Provider>
+    res.send(
+      template({ markup: signinMarkup, title: "Signin", preloadedState: null })
     );
-    res.send(template({ markup, title: "", preloadedState: null }));
   }
 
-  getMe(token)
-    .then(data => {
-      const authState = {
-        accessToken: token,
-        isAuthorized: true,
-        isLoading: false,
-        me: data
-      };
-      if (!req.originalUrl.match("/playlists/")) {
-        const store = configureStore({ auth: authState });
-        const context = {};
-        const markup = renderToString(
-          <Provider store={store}>
-            <Router location={req.url} context={context}>
-              <Routes />
-            </Router>
-          </Provider>
-        );
-        res.send(
-          template({ markup, title: "", preloadedState: store.getState() })
-        );
-      } else {
-        if (!match) {
-          return;
-        }
-        const { userId, playlistId } = match.params as any;
-        if (!userId || !playlistId) {
-          return;
-        }
-        getPlaylist(token, userId, playlistId).then(playlist => {
-          const normalizedData = normalize(
-            playlist,
-            new schema.Entity("items")
-          );
-          const entityState = {
-            entities: normalizedData.entities
-          };
-          const store = configureStore({
-            auth: authState,
-            entity: entityState
-          });
-          const context = {};
-          const markup = renderToString(
-            <Provider store={store}>
-              <Router location={req.url} context={context}>
-                <Routes />
-              </Router>
-            </Provider>
-          );
-          res.send(
-            template({ markup, title: "", preloadedState: store.getState() })
-          );
-        });
-      }
-    })
-    .catch(e => {
-      const authState = {
-        accessToken: null,
-        isAuthorized: false,
-        isLoading: false,
-        me: null
-      };
+  try {
+    const me = await getMe(token);
+    const authState = {
+      accessToken: token,
+      isAuthorized: true,
+      isLoading: false,
+      me
+    };
+    if (!req.originalUrl.match("/playlists/")) {
       const store = configureStore({ auth: authState });
-      const context = {};
       const markup = renderToString(
         <Provider store={store}>
-          <Router location={req.url} context={context}>
+          <Router location={req.url} context={{}}>
             <Routes />
           </Router>
         </Provider>
@@ -205,7 +149,39 @@ app.get("*", (req, res) => {
       res.send(
         template({ markup, title: "", preloadedState: store.getState() })
       );
-    });
+    } else {
+      if (!match) {
+        return;
+      }
+      const { userId, playlistId } = match.params as any;
+      if (!userId || !playlistId) {
+        return;
+      }
+      const playlist = await getPlaylist(token, userId, playlistId);
+      const normalizedData = normalize(playlist, new schema.Entity("items"));
+      const entityState = {
+        entities: normalizedData.entities
+      };
+      const store = configureStore({
+        auth: authState,
+        entity: entityState
+      });
+      const markup = renderToString(
+        <Provider store={store}>
+          <Router location={req.url} context={{}}>
+            <Routes />
+          </Router>
+        </Provider>
+      );
+      res.send(
+        template({ markup, title: "", preloadedState: store.getState() })
+      );
+    }
+  } catch (e) {
+    res.send(
+      template({ markup: signinMarkup, title: "Signin", preloadedState: null })
+    );
+  }
 });
 /* tslint:disable:no-console */
 app.listen(3000, () => console.log("listening on port 3000"));

@@ -14,6 +14,14 @@ interface FetchRequest {
   params?: object;
 }
 
+function statusCheck(response: Response) {
+  if (response.status >= 200 && response.status < 300) {
+    return response;
+  }
+  const error = new Error(response.statusText);
+  throw error;
+}
+
 export function fetchFromAPI({ endpoint, accessToken, params }: FetchRequest) {
   let url = [SPOTIFY_API_ROOT, endpoint].join("/");
   if (params) {
@@ -27,7 +35,9 @@ export function fetchFromAPI({ endpoint, accessToken, params }: FetchRequest) {
   return fetch(url, {
     headers,
     method: "GET"
-  }).then(response => response.json());
+  })
+    .then(response => statusCheck(response as any))
+    .then(response => response.json());
 }
 
 interface PostRequest {
@@ -102,7 +112,6 @@ export function createPlaylist(
     collaborative,
     description
   };
-  console.log(accessToken);
   return postToAPI({
     endpoint: `users/${userId}/playlists`,
     accessToken,
