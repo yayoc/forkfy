@@ -7,6 +7,7 @@ import { ReduxState } from "shared/helpers/types";
 import { Item } from "shared/types";
 import { actions } from "shared/modules/playlist";
 import authorization from "shared/containers/Auth";
+import Track from "shared/components/Track";
 
 const s = require("./Playlist.scss");
 const grid = require("shared/assets/styles/flexboxgrid.min.css");
@@ -61,6 +62,14 @@ class Playlists extends React.Component<OwnProps & StateProps & DispatchProps> {
               <button className={s.forkButton} onClick={this.fork}>
                 Fork this playlist
               </button>
+              {playlist.tracks.items && (
+                <div>
+                  <h3>Tracks</h3>
+                  {playlist.tracks.items.map(trackItem => (
+                    <Track {...trackItem.track} />
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </div>

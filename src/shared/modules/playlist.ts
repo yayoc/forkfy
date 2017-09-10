@@ -5,7 +5,7 @@ import { ActionWithPayload, ActionWithoutPayload } from "shared/helpers/types";
 export enum Types {
   FORK_REQUEST = "playlist/FORK_REQUEST",
   FORK_SUCCESS = "playlist/FORK_SUCCESS",
-  FORK_FAILED = "playlist/FORK_FAILED"
+  FORK_FAILED = "playlist/FORK_FAILED",
 }
 
 // - Actions
