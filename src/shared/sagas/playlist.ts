@@ -22,7 +22,7 @@ function* forkSaga(
       ownUserId,
       playlistId
     );
-    yield put(actions.forkSuccess());
+    yield put(actions.forkSuccess(playlistId));
   } catch (e) {
     yield put(actions.forkFailed());
   }

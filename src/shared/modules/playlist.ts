@@ -22,8 +22,9 @@ export const actions = {
     type: Types.FORK_REQUEST,
     payload: { playlistId, ownUserId }
   }),
-  forkSuccess: () => ({
-    type: Types.FORK_SUCCESS
+  forkSuccess: (playlistId: string) => ({
+    type: Types.FORK_SUCCESS,
+    payload: playlistId
   }),
   forkFailed: () => ({
     type: Types.FORK_FAILED
@@ -47,7 +48,7 @@ export interface ForkRequestPayload {
 
 type Actions =
   | ActionWithPayload<Types.FORK_REQUEST, ForkRequestPayload>
-  | ActionWithoutPayload<Types.FORK_SUCCESS>
+  | ActionWithPayload<Types.FORK_SUCCESS, string>
   | ActionWithPayload<Types.FORK_FAILED, Error>
   | ActionWithPayload<Types.FETCH_REQUEST, ForkRequestPayload>
   | ActionWithoutPayload<Types.FETCH_SUCCESS>
@@ -56,23 +57,30 @@ type Actions =
 // - Reducer
 
 export interface State {
-  isLoading: boolean;
+  isForking: boolean;
   isTracksLoading: boolean;
+  forkedPlaylistIds: string[];
 }
 
 const initialState: State = {
-  isLoading: false,
-  isTracksLoading: false
+  isForking: false,
+  isTracksLoading: false,
+  forkedPlaylistIds: []
 };
 
 export default (state: State = initialState, action: Actions) => {
   switch (action.type) {
     case Types.FORK_REQUEST:
-      return { ...state, isLoading: true };
+      return { ...state, isForking: true };
     case Types.FORK_SUCCESS:
-      return { ...state, isLoading: false };
+      const playlistId = action.payload;
+      return {
+        ...state,
+        isForking: false,
+        forkedPlaylistIds: [...state.forkedPlaylistIds, playlistId]
+      };
     case Types.FORK_FAILED:
-      return { ...state, isLoading: false };
+      return { ...state, isForking: false };
     case Types.FETCH_REQUEST:
       return { ...state, isTracksLoading: true };
     case Types.FETCH_SUCCESS:

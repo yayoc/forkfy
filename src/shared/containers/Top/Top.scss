@@ -23,6 +23,9 @@
   line-height: 1.5;
   touch-action: manipulation;
   margin-left: 5px;
+  &:hover {
+    opacity: 0.8;
+  }
 }
 
 .playlist {

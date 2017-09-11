@@ -30,6 +30,9 @@
   touch-action: manipulation;
   margin-right: 5px;
   text-decoration: none;
+  &:hover {
+    opacity: 0.8;
+  }
 }
 
 .forkButton {
@@ -43,4 +46,14 @@
   line-height: 1.5;
   padding: 7px 35px;
   touch-action: manipulation;
+  &:hover {
+    opacity: 0.8;
+  }
+  &:disabled {
+    cursor: not-allowed;
+    background-color: #75c18c;
+    &:hover {
+      opacity: 1;
+    }
+  }
 }

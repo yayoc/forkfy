@@ -16,6 +16,8 @@ const grid = require("shared/assets/styles/flexboxgrid.min.css");
 interface StateProps {
   playlist: Item;
   isTracksLoading: boolean;
+  isForking: boolean;
+  isForked: boolean;
 }
 
 interface Params {
@@ -34,19 +36,19 @@ interface DispatchProps {
 
 class Playlists extends React.Component<OwnProps & StateProps & DispatchProps> {
   public fork = () => {
-    const { fork, playlist } = this.props;
-    if (!playlist.tracks.items) {
-      fork();
-    }
+    const { fork } = this.props;
+    fork();
   };
 
   public componentDidMount() {
-    const { fetch } = this.props;
-    fetch();
+    const { fetch, playlist } = this.props;
+    if (!playlist.tracks.items) {
+      fetch();
+    }
   }
 
   public render() {
-    const { playlist, isTracksLoading } = this.props;
+    const { playlist, isTracksLoading, isForked, isForking } = this.props;
     return (
       <div>
         <div className={`${grid.row} ${grid["center-xs"]}`}>
@@ -70,9 +72,15 @@ class Playlists extends React.Component<OwnProps & StateProps & DispatchProps> {
               >
                 Listen on Spotify
               </a>
-              <button className={s.forkButton} onClick={this.fork}>
-                Fork this playlist
-              </button>
+              {isForked ? (
+                <button className={s.forkButton} disabled>
+                  Forked
+                </button>
+              ) : (
+                <button className={s.forkButton} onClick={this.fork}>
+                  {isForking ? "Forking..." : "Fork this playlist"}
+                </button>
+              )}
               {isTracksLoading && <Loader />}
               {playlist.tracks.items && (
                 <div>
@@ -92,12 +100,15 @@ class Playlists extends React.Component<OwnProps & StateProps & DispatchProps> {
 
 const mapStateToProps = (state: ReduxState, ownProps: OwnProps): StateProps => {
   const playlistState = getPlaylist(state);
+  const { playlistId } = ownProps.match.params;
   return {
     playlist:
       state.entity && state.entity.entities
-        ? state.entity.entities.items[ownProps.match.params.playlistId]
+        ? state.entity.entities.items[playlistId]
         : null,
-    isTracksLoading: playlistState.isTracksLoading
+    isTracksLoading: playlistState.isTracksLoading,
+    isForking: playlistState.isForking,
+    isForked: playlistState.forkedPlaylistIds.indexOf(playlistId) !== -1
   };
 };
 
