@@ -93,7 +93,7 @@ class Top extends React.Component<OwnProps & StateProps & DispatchProps> {
               )}
               <div className={`${s.playlist} ${grid.row}`}>
                 {playlists.map(i => (
-                  <div className={grid["col-xs"]}>
+                  <div className={grid["col-xs"]} key={i.id}>
                     <div className={grid.box}>
                       <Playlist playlist={i} />
                     </div>

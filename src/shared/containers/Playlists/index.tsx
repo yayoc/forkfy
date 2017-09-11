@@ -34,8 +34,10 @@ interface DispatchProps {
 
 class Playlists extends React.Component<OwnProps & StateProps & DispatchProps> {
   public fork = () => {
-    const { fork } = this.props;
-    fork();
+    const { fork, playlist } = this.props;
+    if (!playlist.tracks.items) {
+      fork();
+    }
   };
 
   public componentDidMount() {
@@ -76,7 +78,7 @@ class Playlists extends React.Component<OwnProps & StateProps & DispatchProps> {
                 <div>
                   <h3>Tracks</h3>
                   {playlist.tracks.items.map(trackItem => (
-                    <Track {...trackItem.track} />
+                    <Track key={trackItem.track.id} {...trackItem.track} />
                   ))}
                 </div>
               )}

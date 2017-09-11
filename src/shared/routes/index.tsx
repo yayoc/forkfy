@@ -30,7 +30,9 @@ export default () => (
     <Header />
     <ScrollManager>
       <div className={s.content}>
-        <Switch>{routes.map(route => <Route {...route} />)}</Switch>
+        <Switch>
+          {routes.map(route => <Route key={route.path} {...route} />)}
+        </Switch>
       </div>
     </ScrollManager>
   </div>
