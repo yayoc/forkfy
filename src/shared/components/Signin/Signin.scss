@@ -1,0 +1,22 @@
+@import "../../assets/styles/main.scss";
+
+.button {
+  width: 50%;
+  vertical-align: middle;
+  padding: 10px 5px;
+  font-size: 24px;
+  text-decoration: none;
+  background-color: $background-color;
+  border: 1px solid transparent;
+  border-radius: 500px;
+  color: $color;
+  cursor: pointer;
+  font-weight: 700;
+  line-height: 1.5;
+  touch-action: manipulation;
+  margin-left: 5px;
+  display: inline-block;
+  &:hover {
+    opacity: 0.8;
+  }
+}

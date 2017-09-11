@@ -4,6 +4,9 @@ import { connect } from "react-redux";
 import { Dispatch } from "redux";
 import { callbackUrl, clientId, authUrl } from "../../constants";
 
+const grid = require("shared/assets/styles/flexboxgrid.min.css");
+const style = require("./Signin.scss");
+
 class Signin extends React.Component<
   { location: { [key: string]: any }; setAccessToken: (token: string) => void },
   {}
@@ -30,8 +33,17 @@ class Signin extends React.Component<
   }
   public render() {
     return (
-      <div>
-        <a href={authUrl}>Signin</a>
+      <div className={`${grid.row} ${grid["center-xs"]}`}>
+        <div className={grid["col-xs-10"]}>
+          <a className={style.button} href={authUrl}>
+            Sign in
+          </a>
+          <p>
+            <small>
+              Forkfy requires your access token to call Spotify APIs. <br />
+            </small>
+          </p>
+        </div>
       </div>
     );
   }
