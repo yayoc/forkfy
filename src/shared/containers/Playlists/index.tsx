@@ -5,15 +5,17 @@ import { match } from "react-router";
 import { Link } from "react-router-dom";
 import { ReduxState } from "shared/helpers/types";
 import { Item } from "shared/types";
-import { actions } from "shared/modules/playlist";
+import { actions, getPlaylist } from "shared/modules/playlist";
 import authorization from "shared/containers/Auth";
 import Track from "shared/components/Track";
+import Loader from "shared/components/Loader";
 
 const s = require("./Playlist.scss");
 const grid = require("shared/assets/styles/flexboxgrid.min.css");
 
 interface StateProps {
   playlist: Item;
+  isTracksLoading: boolean;
 }
 
 interface Params {
@@ -42,7 +44,7 @@ class Playlists extends React.Component<OwnProps & StateProps & DispatchProps> {
   }
 
   public render() {
-    const { playlist } = this.props;
+    const { playlist, isTracksLoading } = this.props;
     return (
       <div>
         <div className={`${grid.row} ${grid["center-xs"]}`}>
@@ -69,6 +71,7 @@ class Playlists extends React.Component<OwnProps & StateProps & DispatchProps> {
               <button className={s.forkButton} onClick={this.fork}>
                 Fork this playlist
               </button>
+              {isTracksLoading && <Loader />}
               {playlist.tracks.items && (
                 <div>
                   <h3>Tracks</h3>
@@ -86,11 +89,13 @@ class Playlists extends React.Component<OwnProps & StateProps & DispatchProps> {
 }
 
 const mapStateToProps = (state: ReduxState, ownProps: OwnProps): StateProps => {
+  const playlistState = getPlaylist(state);
   return {
     playlist:
       state.entity && state.entity.entities
         ? state.entity.entities.items[ownProps.match.params.playlistId]
-        : null
+        : null,
+    isTracksLoading: playlistState.isTracksLoading
   };
 };
 

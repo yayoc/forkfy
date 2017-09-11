@@ -1,4 +1,8 @@
-import { ActionWithPayload, ActionWithoutPayload } from "shared/helpers/types";
+import {
+  ActionWithPayload,
+  ActionWithoutPayload,
+  ReduxState
+} from "shared/helpers/types";
 
 // - Types
 
@@ -51,12 +55,14 @@ type Actions =
 
 // - Reducer
 
-interface State {
+export interface State {
   isLoading: boolean;
+  isTracksLoading: boolean;
 }
 
 const initialState: State = {
-  isLoading: false
+  isLoading: false,
+  isTracksLoading: false
 };
 
 export default (state: State = initialState, action: Actions) => {
@@ -67,9 +73,17 @@ export default (state: State = initialState, action: Actions) => {
       return { ...state, isLoading: false };
     case Types.FORK_FAILED:
       return { ...state, isLoading: false };
+    case Types.FETCH_REQUEST:
+      return { ...state, isTracksLoading: true };
+    case Types.FETCH_SUCCESS:
+      return { ...state, isTracksLoading: false };
+    case Types.FETCH_FAILED:
+      return { ...state, isTracksLoading: false };
     default:
       return state;
   }
 };
 
 // - Selector
+
+export const getPlaylist = (state: ReduxState) => state.playlist;
