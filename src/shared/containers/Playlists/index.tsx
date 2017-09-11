@@ -18,6 +18,7 @@ interface StateProps {
 
 interface Params {
   playlistId: string;
+  userId: string;
 }
 
 interface OwnProps {
@@ -25,14 +26,20 @@ interface OwnProps {
 }
 
 interface DispatchProps {
-  fork: (ownUserId: string) => void;
+  fork: () => void;
+  fetch: () => void;
 }
 
 class Playlists extends React.Component<OwnProps & StateProps & DispatchProps> {
   public fork = () => {
-    const { fork, playlist } = this.props;
-    fork(playlist.owner.id);
+    const { fork } = this.props;
+    fork();
   };
+
+  public componentDidMount() {
+    const { fetch } = this.props;
+    fetch();
+  }
 
   public render() {
     const { playlist } = this.props;
@@ -92,9 +99,20 @@ const mapDispatchToProps = (
   ownProps: OwnProps
 ): DispatchProps => {
   return {
-    fork: (ownUserId: string) => {
+    fork: () => {
       dispatch(
-        actions.forkRequest(ownProps.match.params.playlistId, ownUserId)
+        actions.forkRequest(
+          ownProps.match.params.playlistId,
+          ownProps.match.params.userId
+        )
+      );
+    },
+    fetch: () => {
+      dispatch(
+        actions.fetchRequest(
+          ownProps.match.params.playlistId,
+          ownProps.match.params.userId
+        )
       );
     }
   };

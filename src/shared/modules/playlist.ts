@@ -6,6 +6,9 @@ export enum Types {
   FORK_REQUEST = "playlist/FORK_REQUEST",
   FORK_SUCCESS = "playlist/FORK_SUCCESS",
   FORK_FAILED = "playlist/FORK_FAILED",
+  FETCH_REQUEST = "playlist/FETCH_REQUEST",
+  FETCH_SUCCESS = "playlist/FETCH_SUCCESS",
+  FETCH_FAILED = "playlist/FETCH_FAILED"
 }
 
 // - Actions
@@ -20,6 +23,16 @@ export const actions = {
   }),
   forkFailed: () => ({
     type: Types.FORK_FAILED
+  }),
+  fetchRequest: (playlistId: string, ownUserId: string) => ({
+    type: Types.FETCH_REQUEST,
+    payload: { playlistId, ownUserId }
+  }),
+  fetchSuccess: () => ({
+    type: Types.FETCH_SUCCESS
+  }),
+  fetchFailed: () => ({
+    type: Types.FETCH_FAILED
   })
 };
 
@@ -31,7 +44,10 @@ export interface ForkRequestPayload {
 type Actions =
   | ActionWithPayload<Types.FORK_REQUEST, ForkRequestPayload>
   | ActionWithoutPayload<Types.FORK_SUCCESS>
-  | ActionWithPayload<Types.FORK_FAILED, Error>;
+  | ActionWithPayload<Types.FORK_FAILED, Error>
+  | ActionWithPayload<Types.FETCH_REQUEST, ForkRequestPayload>
+  | ActionWithoutPayload<Types.FETCH_SUCCESS>
+  | ActionWithPayload<Types.FETCH_FAILED, Error>;
 
 // - Reducer
 

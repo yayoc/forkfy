@@ -59,7 +59,6 @@ export function fetchFromAPI({ endpoint, accessToken, params }: FetchRequest) {
   }).then(response => response.json());
 }
 
-
 export function postToAPI({ endpoint, accessToken, body }: PostRequest) {
   const url = [API_ROOT, endpoint].join("/");
   const headers = {
@@ -90,6 +89,17 @@ export function fork(
       name: "sample",
       description: ""
     }
+  });
+}
+
+export function fetchPlaylist(
+  accessToken: string,
+  playlistId: string,
+  userId: string
+): Promise<any> {
+  return fetchFromAPI({
+    accessToken,
+    endpoint: `users/${userId}/playlists/${playlistId}`
   });
 }
 

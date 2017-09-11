@@ -1,7 +1,7 @@
 import { Effect, fork, all } from "redux-saga/effects";
 import { watchFetchMeSaga, watchLogoutSaga } from "./auth";
 import { watchSearchSaga, watchSearchMoreSaga } from "./search";
-import { watchForkSaga } from "./playlist";
+import { watchForkSaga, watchFetchSaga } from "./playlist";
 export type SagaIterator = IterableIterator<Effect | Effect[]>;
 export default function* rootSaga() {
   yield fork(watchFetchMeSaga);
@@ -9,4 +9,5 @@ export default function* rootSaga() {
   yield fork(watchSearchSaga);
   yield fork(watchSearchMoreSaga);
   yield fork(watchForkSaga);
+  yield fork(watchFetchSaga);
 }

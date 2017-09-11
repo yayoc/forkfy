@@ -73,6 +73,18 @@ app.get("/api/search", async (req, res, next) => {
   }
 });
 
+app.get("/api/users/:userId/playlists/:playlistId", async (req, res, next) => {
+  try {
+    const accessToken = (req as any).token;
+    const userId = req.param("userId");
+    const playlistId = req.param("playlistId");
+    const response = await getPlaylist(accessToken, userId, playlistId);
+    res.status(200).send(response);
+  } catch (e) {
+    res.status(500).render("error", { e });
+  }
+});
+
 app.post("/api/users/:userId/playlists", async (req, res, next) => {
   const accessToken = (req as any).token;
   const userId = req.param("userId");
