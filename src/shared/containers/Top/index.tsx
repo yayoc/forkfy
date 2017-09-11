@@ -73,7 +73,7 @@ class Top extends React.Component<OwnProps & StateProps & DispatchProps> {
               className={`${s.input} ${grid["col-xs-7"]}`}
               onChange={this.onChage}
               value={this.state.q}
-              placeholder="Artist name, keyword.. "
+              placeholder="Search for playlists"
               onKeyDown={this.onKeyDown}
             />
             <button
