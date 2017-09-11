@@ -42,39 +42,41 @@ class Header extends React.Component<StateProps & DispatchProps> {
               Forkfy
             </NavLink>
           </div>
-          {authState.isAuthorized &&
-          authState.me &&
-          authState.me.images.length > 0 && (
-            <div className={grid["col-xs-2"]} onClick={this.menuClicked}>
-              <img
-                className={s.avatar}
-                width="30"
-                height="30"
-                src={authState.me.images[0].url}
-              />
-              <div
-                className={s.menu}
-                style={{ display: this.state.isOpen ? "block" : "none" }}
-              >
-                <ul>
-                  <li>
-                    <a
-                      target="_blank"
-                      href={authState.me.external_urls.spotify}
-                    >
-                      Check profile on Spotify
-                    </a>
-                  </li>
-                  <li>
-                    <a onClick={this.signoutClicked}>Signout</a>
-                  </li>
-                  <li>
-                    <Link to="/about">About</Link>
-                  </li>
-                </ul>
+          <div className={grid["col-xs-2"]}>
+            {authState.isAuthorized &&
+            authState.me &&
+            authState.me.images.length > 0 && (
+              <div onClick={this.menuClicked}>
+                <img
+                  className={s.avatar}
+                  width="30"
+                  height="30"
+                  src={authState.me.images[0].url}
+                />
+                <div
+                  className={s.menu}
+                  style={{ display: this.state.isOpen ? "block" : "none" }}
+                >
+                  <ul>
+                    <li>
+                      <a
+                        target="_blank"
+                        href={authState.me.external_urls.spotify}
+                      >
+                        Check profile on Spotify
+                      </a>
+                    </li>
+                    <li>
+                      <a onClick={this.signoutClicked}>Signout</a>
+                    </li>
+                    <li>
+                      <Link to="/about">About</Link>
+                    </li>
+                  </ul>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </header>
     );
