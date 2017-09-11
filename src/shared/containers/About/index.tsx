@@ -21,6 +21,27 @@ export default () => (
           twitter(@yayoc_)
         </a>. - Nobuhide Yayoshi
       </p>
+      <div>
+        <a
+          href="https://twitter.com/share"
+          className="twitter-share-button"
+          data-url="http://forkfy.yayoc.com"
+          data-text="Forking playlist on spotify"
+          data-via="yayoc_"
+          data-size="large"
+        >
+          Tweet
+        </a>
+        <a
+          className="github-button"
+          href="https://github.com/yayoc/forkfy"
+          data-icon="octicon-star"
+          data-size="large"
+          aria-label="Star yayoc/forkfy on GitHub"
+        >
+          Star
+        </a>
+      </div>
     </div>
   </div>
 );
