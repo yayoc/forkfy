@@ -1,3 +1,4 @@
+const webpack = require("webpack");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ScriptExtHtmlWebpackPlugin = require("script-ext-html-webpack-plugin");
@@ -30,6 +31,10 @@ const HtmlPlugin = new HtmlWebpackPlugin({
 
 const ScriptExtHtmlPlugin = new ScriptExtHtmlWebpackPlugin({
   defaultAttribute: "async"
+});
+
+const DefinePlugin = new webpack.DefinePlugin({
+  IN_PRODUCTION
 });
 
 const LocalStyles = new ExtractTextPlugin({
@@ -98,5 +103,6 @@ module.exports = {
   LocalStyles,
   CSSLoaderRule,
   BabelLoaderRule,
+  DefinePlugin,
   stats
 };

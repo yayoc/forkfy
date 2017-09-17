@@ -27,7 +27,7 @@ module.exports = {
       { test: /\.tsx?$/, loader: "awesome-typescript-loader" }
     ]
   },
-  plugins: [CommonConfig.LocalStyles],
+  plugins: [CommonConfig.LocalStyles, CommonConfig.DefinePlugin],
   devtool: "source-map",
   stats: CommonConfig.stats
 };

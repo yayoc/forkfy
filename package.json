@@ -7,7 +7,7 @@
   "author": "yayoc <hi@yayoc.com> (http://yayoc.com)",
   "license": "ISC",
   "scripts": {
-    "build": "webpack --config ./config/server.js && webpack --config ./config/client.js",
+    "build": "cross-env NODE_ENV=production webpack --config ./config/server.js && cross-env NODE_ENV=production webpack --config ./config/client.js",
     "start": "node dist/server.js",
     "dev:client": "webpack --config ./config/client.js --watch",
     "dev:server": "webpack --config ./config/server.js --watch",
@@ -60,6 +60,7 @@
     "babel-preset-env": "^1.6.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
+    "cross-env": "^5.0.5",
     "css-loader": "^0.28.4",
     "eslint": "^4.4.0",
     "eslint-config-airbnb": "^15.1.0",

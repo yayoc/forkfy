@@ -1,5 +1,9 @@
-export const clientId = "3b2b30d3541f4c43ad27044972adef4b";
-export const callbackUrl = "http://localhost:3000";
+declare var IN_PRODUCTION: boolean;
+
+export const clientId = "3affaf0ed25944c589af85afbe6ba809";
+export const callbackUrl = IN_PRODUCTION
+  ? "https://forkfy-vcxpormhzx.now.sh"
+  : "http://localhost:3000";
 export const scopes =
   "playlist-read-private playlist-read-collaborative playlist-modify-public playlist-modify-private";
 

@@ -1,5 +1,4 @@
 const CommonConfig = require("./common.js");
-
 const nodeExternals = require("webpack-node-externals");
 const path = require("path");
 
@@ -27,7 +26,7 @@ module.exports = {
       { test: /\.tsx?$/, loader: "awesome-typescript-loader" }
     ]
   },
-  plugins: [CommonConfig.LocalStyles],
+  plugins: [CommonConfig.LocalStyles, CommonConfig.DefinePlugin],
   externals: nodeExternals(),
   devtool: "source-map",
   stats: CommonConfig.stats
