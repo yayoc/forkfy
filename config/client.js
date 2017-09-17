@@ -28,6 +28,6 @@ module.exports = {
     ]
   },
   plugins: [CommonConfig.LocalStyles, CommonConfig.DefinePlugin],
-  devtool: "source-map",
+  devtool: CommonConfig.IN_PRODUCTION ? "" : "source-map",
   stats: CommonConfig.stats
 };

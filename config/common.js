@@ -104,5 +104,6 @@ module.exports = {
   CSSLoaderRule,
   BabelLoaderRule,
   DefinePlugin,
-  stats
+  stats,
+  IN_PRODUCTION
 };
