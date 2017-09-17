@@ -1,31 +1,43 @@
 # Forkfy
 
-`*Forkfy*` enables forking playlist on Spotify with ability to merge changes back into your own playlist.
+**Forkfy** enables forking playlist on Spotify with ability to merge changes back into your own playlist.
 
 ## About
 
-Please try to use `demo` page.
+Please try to use [demo](https://forkfy-vcxpormhzx.now.sh/) page.
 
 ## Get Started
 
-`*yarn install*`
-`*yarn run build*`
-`*yarn run start*`
+```sh
+$ yarn install
+
+$ yarn run dev:client
+
+$ yarn run dev:server
+
+$ yarn run dev:start
+```
+
+open http://localhost:3000
 
 ## Features
 
 * Forking playlist 
 * Search playlist
-* Show friends playlist
 
 ## Stacks
 
+* Typescript
 * React/Redux structure
-* PWA
+* redux-saga
 * SSR
-* Flow type
 * Spotify API
+* Now (Hosting)
+
+## TODO
+
+- [ ] Add tests.
 
 ## Test
 
-`*yarn run test*`
+`yarn run test`
