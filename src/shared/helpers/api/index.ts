@@ -1,6 +1,9 @@
 import fetch from "node-fetch";
+declare var IN_PRODUCTION: boolean;
 
-const API_ROOT = "http://localhost:3000/api";
+const API_ROOT = IN_PRODUCTION
+  ? "https://forkfy.now.sh/api"
+  : "http://localhost:3000/api";
 
 export const queryParams = (params: { [key: string]: any }) => {
   return Object.keys(params)
