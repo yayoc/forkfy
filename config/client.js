@@ -32,6 +32,6 @@ module.exports = {
     CommonConfig.DefinePlugin,
     CommonConfig.UglifyPlugin
   ],
-  devtool: CommonConfig.IN_PRODUCTION ? "" : "source-map",
+  devtool: "source-map",
   stats: CommonConfig.stats
 };
