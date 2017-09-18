@@ -4,7 +4,7 @@
 
 ## About
 
-Please try to use [demo](https://forkfy-vcxpormhzx.now.sh/) page.
+Please try to use [demo](https://forkfy.now.sh/) page.
 
 ## Get Started
 
