@@ -2,6 +2,7 @@ const webpack = require("webpack");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ScriptExtHtmlWebpackPlugin = require("script-ext-html-webpack-plugin");
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 const path = require("path");
 
@@ -95,6 +96,8 @@ const stats = {
   }
 };
 
+const UglifyPlugin = new UglifyJSPlugin();
+
 module.exports = {
   srcPath,
   distPath,
@@ -105,5 +108,6 @@ module.exports = {
   BabelLoaderRule,
   DefinePlugin,
   stats,
+  UglifyPlugin,
   IN_PRODUCTION
 };

@@ -27,7 +27,11 @@ module.exports = {
       { test: /\.tsx?$/, loader: "awesome-typescript-loader" }
     ]
   },
-  plugins: [CommonConfig.LocalStyles, CommonConfig.DefinePlugin],
+  plugins: [
+    CommonConfig.LocalStyles,
+    CommonConfig.DefinePlugin,
+    CommonConfig.UglifyPlugin
+  ],
   devtool: CommonConfig.IN_PRODUCTION ? "" : "source-map",
   stats: CommonConfig.stats
 };
