@@ -25,7 +25,7 @@ export default () => (
         <a
           href="https://twitter.com/share"
           className="twitter-share-button"
-          data-url="http://forkfy.yayoc.com"
+          data-url="https://forkfy.now.sh"
           data-text="Forking playlist on spotify"
           data-via="yayoc_"
           data-size="large"
