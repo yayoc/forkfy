@@ -8,15 +8,15 @@ export default () => (
     <div className={grid["col-xs-10"]}>
       <h1>About Forkfy</h1>
       <p className={s.p}>
-        Forkfy is a web applicaiton for forking playlists to your playlists on
+        Forkfy is a web application for forking playlists to your playlists on
         Spotify. <br />
-        A personal project, this is powerd by Spotify APIs. <br />
-        All of source codes are hosted on{" "}
+        A personal project, this is powered by Spotify APIs. <br />
+        All of the source codes are hosted on{" "}
         <a target="_blank" href="https://github.com/yayoc/forkfy">
           Github
         </a>{" "}
         publicly. <br />
-        If you have feedbacks, please let me know. I am reachable on{" "}
+        If you have feedback, please let me know. I am reachable on{" "}
         <a target="_blank" href="https://twitter.com/yayoc_">
           twitter(@yayoc_)
         </a>. - Nobuhide Yayoshi
