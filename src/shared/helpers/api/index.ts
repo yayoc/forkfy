@@ -1,4 +1,3 @@
-import fetch from "node-fetch";
 declare var IN_PRODUCTION: boolean;
 
 const API_ROOT = IN_PRODUCTION
