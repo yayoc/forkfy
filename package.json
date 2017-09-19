@@ -15,7 +15,8 @@
     "dev:start": "nodemon dist/server.js --watch dist/server.js",
     "lint": "eslint src/*",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "dependencies": {
     "@types/body-parser": "^1.16.5",
