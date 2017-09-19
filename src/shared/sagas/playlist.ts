@@ -24,7 +24,7 @@ function* forkSaga(
     );
     yield put(actions.forkSuccess(playlistId));
   } catch (e) {
-    yield put(actions.forkFailed());
+    yield put(actions.forkFailed(e));
   }
 }
 
@@ -51,7 +51,7 @@ function* fetchSaga(
     yield put(actions.fetchSuccess());
     yield put(entityAction.setEntities(normalizedData.entities));
   } catch (e) {
-    yield put(actions.fetchFailed());
+    yield put(actions.fetchFailed(e));
   }
 }
 

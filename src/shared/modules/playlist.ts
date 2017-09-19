@@ -26,8 +26,9 @@ export const actions = {
     type: Types.FORK_SUCCESS,
     payload: playlistId
   }),
-  forkFailed: () => ({
-    type: Types.FORK_FAILED
+  forkFailed: (error: Error) => ({
+    type: Types.FORK_FAILED,
+    payload: error
   }),
   fetchRequest: (playlistId: string, ownUserId: string) => ({
     type: Types.FETCH_REQUEST,
@@ -36,8 +37,9 @@ export const actions = {
   fetchSuccess: () => ({
     type: Types.FETCH_SUCCESS
   }),
-  fetchFailed: () => ({
-    type: Types.FETCH_FAILED
+  fetchFailed: (error: Error) => ({
+    type: Types.FETCH_FAILED,
+    payload: error
   })
 };
 
