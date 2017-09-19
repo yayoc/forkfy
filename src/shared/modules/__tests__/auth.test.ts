@@ -22,7 +22,12 @@ describe("auth module", () => {
   describe("reducer", () => {
     let state = {};
     beforeAll(() => {
-      state = { accessToken: null, me: null, isLoading: false };
+      state = {
+        accessToken: null,
+        me: null,
+        isLoading: false,
+        isAuthorized: false
+      };
     });
     it("should return a state with an access token", () => {
       const accessToken = "SomeTokenString";
@@ -70,7 +75,11 @@ describe("auth module", () => {
         payload: me,
         type: Types.FETCH_ME_SUCCESS
       };
-      expect(reducer(undefined, action)).toEqual({ ...state, me });
+      expect(reducer(undefined, action)).toEqual({
+        ...state,
+        me,
+        isAuthorized: true
+      });
     });
   });
 });

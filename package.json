@@ -7,13 +7,15 @@
   "author": "yayoc <hi@yayoc.com> (http://yayoc.com)",
   "license": "ISC",
   "scripts": {
-    "build": "cross-env NODE_ENV=production webpack --config ./config/server.js && cross-env NODE_ENV=production webpack --config ./config/client.js",
+    "build":
+      "cross-env NODE_ENV=production webpack --config ./config/server.js && cross-env NODE_ENV=production webpack --config ./config/client.js",
     "start": "node dist/server.js",
     "dev:client": "webpack --config ./config/client.js --watch",
     "dev:server": "webpack --config ./config/server.js --watch",
     "dev:start": "nodemon dist/server.js --watch dist/server.js",
     "lint": "eslint src/*",
-    "test": "jest"
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "@types/body-parser": "^1.16.5",
@@ -94,11 +96,6 @@
       ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "json"
-    ]
+    "moduleFileExtensions": ["ts", "tsx", "js", "json"]
   }
 }
